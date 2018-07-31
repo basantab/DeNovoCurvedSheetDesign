@@ -3,3 +3,5 @@ This repository contains the files necessary to generate most designs in the 201
 
 Blueprint.py: Library by Javier Castellanos for Blueprint object handling.
 
+BPB_functions.py: Library of functions for working with curved sheet protein backbones.
+
