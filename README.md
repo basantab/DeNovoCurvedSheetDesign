@@ -5,3 +5,4 @@ Blueprint.py: Library by Javier Castellanos for Blueprint object handling.
 
 BPB_functions.py: Library of functions for working with curved sheet protein backbones.
 
+SheetGenerationProtocolTemplate.xml: Template Rosetta XML protocol input for different fold designs
