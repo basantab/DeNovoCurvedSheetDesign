@@ -22,33 +22,16 @@ parser = ArgumentParser()
 parser.add_argument('-xml', type=str, help="xml template")
 parser.add_argument('-pdb', type=str, help="input pdb")
 parser.add_argument('-wts', type=str, help="wts file for design")
-parser.add_argument('-motif', type=str, help="motif file")
 parser.add_argument('-blueresfile', action='store_true')
-parser.add_argument('-abego', type=str)
 parser.add_argument('-resfile', type=str)
 args = parser.parse_args()
 
 template_xml = args.xml
-motif_filename = args.motif
-abego = args.abego # for L3
-#topol = "L[1-1]H[15-15]L[2-2]H[7-7]L[5-5]E[4-4]L[2-2]E[4-4]L[1-1]H[10-15]L[1-2]E[11-11]L[2-2]E[10-10]L[2-2]E[12-12]L[2-2]E[10-10]L[1-1]"
-#topol = "L[1-1]H[18-18]L[1-2]H[6-6]L[5-5]E[4-4]L[2-2]E[4-4]L[1-1]H[11,13]L[2-3]E[11-11]L[2-2]E[10-10]L[2-2]E[12-12]L[2-2]E[10-10]L[1-1]"
 topol = "L[1-1]H[17-17]L[2-2]H[7-7]L[5-5]E[4-4]L[2-2]E[4-4]L[1-1]H[14-14]L[2-2]E[10-10]L[2-2]E[10-10]L[2-2]E[12-12]L[2-2]E[9-9]L[1-1]"
 
-if motif_filename:
-
-	ss,combinations, dic_abego = MotifTopology(topol,motif_filename)
-else:
-	ss,combinations = GetCombinations(topol)
-#print combinations
+ss,combinations = GetCombinations(topol)
 
 print topol
-#==============================
-# ncenter: Bulge N-ter is free of restrictions 
-
-# ccenter: Bulge C-ter is free of restrictions
-
-
 
 bulges =  {'E3':5,'E6':3} # Specific definition. Bulges are located at positions defined by the user
 
@@ -105,9 +88,6 @@ for comb in combinations:
 			if not os.path.exists(pathname):
 				os.mkdir(pathname)
 			os.chdir(pathname)
-			# copy files provided by the first step
-			#os.system('cp ../input.pdb .')
-			#os.system('cp ../bp1 .')
 
 			## Build blueprints
 			MakeRefBlueprint(ss,comb,picked_bulges,refblue = 'bp')			
@@ -145,12 +125,12 @@ for comb in combinations:
 			AddSegmentToBlueprint(refblue = 'bp', segments = ['H1','L2'], blue0 = 'bp4', \
 					      newblue='bp6', append=False,  ss_pairing_shift="SSPAIR 1-2.A.0;1-6.P.-5;3-4.A.99;4-5.A.99;5-6.A.99", \
 					      hh_pairing="HHPAIR 1-2.A",hs_pairing='HSSTRIPLET 2,1-2',only_remodel=['H2','L3'], seg_abego={'L2':'GB'}) # seg_abego={'L2':'GB'}
+
 			#---------------------------------------------------------
-			# Blueprints are already written. Now XMLs, cst, condor files...
+			# Blueprints are already written. Now XMLs, cst, etc...
 			# Write constraints for good HB pairing of built strands
-			#for bp in ['bp1.b','bp2.b','bp3.b']:
-			#	os.system('generate_sheetcst2.py %s > %s.cst' %(bp,bp))
-			# input pdb
+
+			# Write initial input PDB:
 			if args.pdb:
 				os.system('cp ../%s input.pdb' %(args.pdb))
 			else:
@@ -545,12 +525,6 @@ for comb in combinations:
 			H1C_r1 = "-parser:script_vars H1C_r1=%s\n"%(str(h1c)) ; flags_out.write(H1C_r1)
 			H1C_r2 = "-parser:script_vars H1C_r2=%s\n"%(str(loop6)) ;flags_out.write(H1C_r2)
 			H1C_dist = "-parser:script_vars H1C_dist=%s\n"%("11.0") ;flags_out.write(H1C_dist)
-			'''
-			<AtomicDistance name="H1Na" residue1="%%H1Na_r1%%" atomname1="CA" residue2="%%H1Na_r2%%" atomname2="CA" distance="%%H1Na_dist%%" confidence="1" />
-			<AtomicDistance name="H1Nb" residue1="%%H1Nb_r1%%" atomname1="CA" residue2="%%H1Nb_r2%%" atomname2="CA" distance="%%H1Nb_dist%%" confidence="1" />
-			<AtomicDistance name="H2N" residue1="%%H2N_r1%%" atomname1="CA" residue2="%%H2N_r2%%" atomname2="CA" distance="%%H2N_dist%%" confidence="0" />
-			<AtomicDistance name="H1C" residue1="%%H1C_r1%%" atomname1="CA" residue2="%%H1C_r2%%" atomname2="CA" distance="%%H1C_dist%%" confidence="1" />
-			'''
 			flags_out.close()
 			#-----------------------
 			# Write modified xml
