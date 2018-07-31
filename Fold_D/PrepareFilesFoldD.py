@@ -12,7 +12,7 @@ import os
 import copy
 from Blueprint import Blueprint
 import numpy as np
-from BPBf_av_mod import *
+from BPB_functions import *
 import subprocess
 
 #==============================
