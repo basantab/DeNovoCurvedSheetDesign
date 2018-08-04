@@ -1,26 +1,22 @@
-""
-#Script for writing blueprint files from a string defining the protein topology
-#H[n-m]L[n-m]
-#Length: xxx
-""
-# USE: python build_blueprints.v2.py -xml template_bb+design.xml -blueresfile
+"""
+This library contains the utility functions for generating the curved sheet folds
+described in "Principles for designing proteins with cavities formed by curved beta-sheets"
+Enrique Marcos - emarcos82@gmail.com
+Benjamin Basanta - basantab@uw.edu
+"""
 
 import itertools
 import re
 import sys
 import os
 import copy
-from Blueprint import Blueprint 
+from Blueprint import Blueprint
 import numpy as np
 
-#def Bulged(strand):
-#       flag=False
-#        for res in strand.bp_data:
-#                if 'EA' in res:
-#                        flag=True
- #       return flag
-
 def Bulged(strand):
+        """
+        Return absolute position of bulge in input strand if present. Otherwise, return None.
+        """
         flag=False ; bulgepos=None
         for i in range(1,len(strand.bp_data)-1):
                 prev_res = strand.bp_data[i-1]
@@ -32,7 +28,7 @@ def Bulged(strand):
         return bulgepos
 
 def MakePlainBlueprint(ss,comb,bluefile):
-        c = comb     
+        c = comb
         out_file = open(bluefile,'w')
         struct = {'H':'HA', 'E':'EB', 'L':'LA'}
         total_length=sum(c)
@@ -48,7 +44,7 @@ def MakePlainBlueprint(ss,comb,bluefile):
 #------------
 def MakeRefBlueprint(ss,comb,bulges,**kwargs):
 	refbluefile = kwargs.get('refblue')
-        c = comb     
+        c = comb
         out_file = open(refbluefile,'w')
         struct = {'H':'HA', 'E':'EB', 'L':'LA'}
         total_length=sum(c)
@@ -125,7 +121,7 @@ def MakeFirstBlueprint(**kwargs):
 
 	refblue.bp_data = tail + bp_data_new + tail
 
-	# write strand pairing	
+	# write strand pairing
 	ss_line = "SSPAIR "
 	# Get first strand to set "start"
 	segments.sort()
@@ -148,11 +144,11 @@ def MakeFirstBlueprint(**kwargs):
 		#------
 		if orient == 'A':
 			shift = n1-n2
-		
+
 		if npairs==0:
-			ss_line += '%s-%s.%s.%s' %(int(s1[1:]),int(s2[1:]),orient,shift)	
+			ss_line += '%s-%s.%s.%s' %(int(s1[1:]),int(s2[1:]),orient,shift)
 		else:
-			ss_line += ';%s-%s.%s.%s' %(int(s1[1:]),int(s2[1:]),orient,shift)	
+			ss_line += ';%s-%s.%s.%s' %(int(s1[1:]),int(s2[1:]),orient,shift)
 		npairs+=1
 
 	header = [ss_line]
@@ -171,12 +167,12 @@ def MakeFirstBlueprint(**kwargs):
 				blue.segment_dict[seg].bp_data[pos][2]+=letter
 				if letter == 'E' or letter == 'G':
 					blue.segment_dict[seg].bp_data[pos][1] = 'G'
-			
+
 	blue.dump_blueprint(newbluefile,header_lines=header)
 	# Abego 'B' for building strand
 	os.system("sed  's/ E / EB/g;s/ H / HA/g' %s > %s.b" %(newbluefile,newbluefile))
-				
-			
+
+
 #-------------------
 def AddSegmentToBlueprint(**kwargs):
 	tail = [[0, 'V', 'L', 'R']]
@@ -204,7 +200,7 @@ def AddSegmentToBlueprint(**kwargs):
 	bp_data_new = []
 	for seg in segments:
 		for res in refblue.segment_dict[seg].bp_data:
-			bp_data_new.append(res)		
+			bp_data_new.append(res)
 
         if append==True:
                 blue0.bp_data[-2][3]='R'
@@ -224,8 +220,8 @@ def AddSegmentToBlueprint(**kwargs):
 		index2 = insert_between_last - 1
 		if index1>1:  # we need at least one point fixed (not R)
 			blue0.bp_data[index1][3]='R' #; blue0.bp_data[index1][2]='LX'
-		
-		bp_data_new = blue0.bp_data[:index1+1] + bp_data_new # + blue0.bp_data[index2:] 
+
+		bp_data_new = blue0.bp_data[:index1+1] + bp_data_new # + blue0.bp_data[index2:]
 		shift = index2-index1-1
 		for k in range(index2,len(blue0.bp_data)):
 			blue0.bp_data[k][0]-=shift
@@ -233,7 +229,7 @@ def AddSegmentToBlueprint(**kwargs):
 		bp_data_new = bp_data_new + blue0.bp_data[index2:]
 
         else:
-                bp_data_new = blue0.bp_data		
+                bp_data_new = blue0.bp_data
 
 	blue0_top = blue0.topology() # for abego conversion later
 	blue0_cp = copy.deepcopy(blue0)
@@ -268,7 +264,7 @@ def AddSegmentToBlueprint(**kwargs):
 
                 #if orient == 'A':
                 #shift = n1-n2
-		shift=99	
+		shift=99
 		if npairs==0:
                         ss_line += '%s-%s.%s.%s' %(int(s1[1:]),int(s2[1:]),orient,shift)
                 else:
@@ -337,7 +333,7 @@ def AddSegmentToBlueprint(**kwargs):
 				newindex = curr_ss[:counter+1].count(ss)
 				if ss=='L': newindex+=1 # because Nter is loop L1 (and is not added through segments)
 				counter+=1
-			elif insert_between_first:	
+			elif insert_between_first:
 				r=re.compile('[HEL]\d') ; seg_list = r.findall(top)
 				flag=False
 				for k,sg in enumerate(seg_list): # find segment whhere insert_first is located
@@ -347,7 +343,7 @@ def AddSegmentToBlueprint(**kwargs):
 							break
 					if flag:
 						break
-	
+
 				first_seg=k
 				newindex = curr_ss[:first_seg+1+counter].count(ss)
 				counter+=1
@@ -369,7 +365,7 @@ def AddSegmentToBlueprint(**kwargs):
 						res[1]='G'
 
         	blue.dump_blueprint(newbluefile,header_lines=header)
-	
+
 	if specific_abego: # only abegos for specific positions
 		blue = Blueprint('%s' %(newbluefile))
 		for seg in specific_abego:
@@ -386,7 +382,7 @@ def AddSegmentToBlueprint(**kwargs):
                         blue.remodel_segment(id=seg)
 
 		blue.dump_blueprint(newbluefile,header_lines=header)
-		
+
 	# Abego 'B' for building strand
 	os.system("sed  's/ E / EB/g;s/ H / HA/g' %s > %s.b" %(newbluefile,newbluefile))
 
@@ -436,7 +432,7 @@ def XMLReplaceXXXYYY(**kwargs):
                         if yyy:
                                 line = line.replace('yyy','%s' %(yyy))
 				xml_lines[i] = line
-				
+
 			if zzz:
 				line = line.replace('zzz','%s' %(zzz))
 				xml_lines[i] = line
@@ -518,7 +514,7 @@ def AmbiguousConstraints(list1,list2):
 	for res1 in list1:
 		for res2 in list2:
 			st += "AtomPair N %i O %i BOUNDED 3.5 4.5 0.5\n" %(res1,res2)
-	st+='END_AMBIGUOUS\n'	
+	st+='END_AMBIGUOUS\n'
 	return st
 
 def ReplaceLine(line,word1,word2):
@@ -546,7 +542,7 @@ def MotifTopology(topol,motif_filename):
 	for i in range(len(ss)):
 		if i in specific:
 			frag = lengths2[j]
-			comb.append( [int(l) for l in frag] )		
+			comb.append( [int(l) for l in frag] )
 			j+=1
 		else:
 			fragment = lengths[k]
@@ -614,7 +610,7 @@ def GetCombinations(topol):
 	for i in range(len(ss)):
 		if i in specific:
 			frag = lengths2[j]
-			comb.append( [int(l) for l in frag] )		
+			comb.append( [int(l) for l in frag] )
 			j+=1
 		else:
 			fragment = lengths[k]
@@ -629,11 +625,11 @@ def HBondConstraints(donor,acceptor): # return string for cst file
     hb_ang = np.deg2rad(160.)
     hb_ang_tol=np.deg2rad(20.0)
     #hb_ang_tol=np.deg2rad(30.0)
-    st = "AtomPair N %i O %i HARMONIC 3.0 0.5\n" %(donor,acceptor) 
+    st = "AtomPair N %i O %i HARMONIC 3.0 0.5\n" %(donor,acceptor)
     #st = "AtomPair N %i O %i BOUNDED 2.7 3.3 0.2 \n" %(donor,acceptor)
     st+= "Angle N %i H %i O %i HARMONIC %3.1f %3.1f\n" %(donor,donor,acceptor,hb_ang,hb_ang_tol)
     st+= "Angle H %i O %i C %i HARMONIC %3.1f %3.1f\n" %(donor,acceptor,acceptor,hb_ang,hb_ang_tol)
-    return st	
+    return st
 
 def CircularHBondConstraints(donor,acceptor): # return string for cst file
     hb_ang = np.deg2rad(180.)
@@ -646,7 +642,7 @@ def CircularHBondConstraints(donor,acceptor): # return string for cst file
     return st
 
 def PairConstraints(a,b,value,tol,tag): # return string for cst file
-    st = "AtomPair CA %i CA %i BOUNDED %3.1f %3.1f %3.1f 0.5 %s\n" %(a,b,value-tol,value+tol,tol/2,tag) 
+    st = "AtomPair CA %i CA %i BOUNDED %3.1f %3.1f %3.1f 0.5 %s\n" %(a,b,value-tol,value+tol,tol/2,tag)
     return st
 
 def HarmonicPairConstraints(a,b,value,sd): # return string for cst file
@@ -668,7 +664,7 @@ def HarmonicAngleConstraints(a,b,c,value,tol): # return string for cst file
 
 
 def CstTypeAngleConstraints(a,b,c,value,tol,cst_type): # return string for cst file
-    st=''	
+    st=''
     if cst_type=='harmonic':
 	    ang = np.deg2rad(value)
 	    ang_tol = np.deg2rad(tol)
@@ -683,7 +679,7 @@ def CstTypeAngleConstraints(a,b,c,value,tol,cst_type): # return string for cst f
 
 def DihedralConstraints(a,b,value,tol,tag): # return string for cst file
     ang = np.deg2rad(value)
-    ang_tol = np.deg2rad(tol)    
+    ang_tol = np.deg2rad(tol)
     sd = ang_tol/2
     st = "Dihedral CB %i CA %i CA %i CB %i BOUNDED %3.2f %3.2f %3.2f 0.5 %s\n" %(a,a,b,b,ang-ang_tol,ang+ang_tol,sd,tag)
     return st
@@ -726,7 +722,7 @@ def PerfectHelixCst(bluefile,helixn):
 	for pos in range(HN+1,HC-1):
 		cst += "Dihedral C %i N %i CA %i C %i HARMONIC -1.05 0.09 \n" %(pos-1,pos,pos,pos) #phi
 		cst += "Dihedral N %i CA %i C %i N %i HARMONIC -0.78 0.09 \n" %(pos,pos,pos,pos+1) #psi
-	cst += "Dihedral C %i N %i CA %i C %i HARMONIC -1.05 0.09 \n" %(HC-1,HC,HC,HC) #phi 
+	cst += "Dihedral C %i N %i CA %i C %i HARMONIC -1.05 0.09 \n" %(HC-1,HC,HC,HC) #phi
         return cst
 
 def HelixConstraints(bluefile):
@@ -749,7 +745,7 @@ def HelixConstraints(bluefile):
 	e4npos = int(e4.bp_data[0][0])
 	e4cpos = int(e4.bp_data[-1][0])
 
-        lines=''                
+        lines=''
 
 	# Nter E3
 	atomlist1=[]
@@ -762,7 +758,7 @@ def HelixConstraints(bluefile):
 	for i in range(0,4):
         	index = (h1cpos-1) - i
         	atomlist2.append( blue.bp_data[index][0] )
-	
+
 	value = 8.0 ; tol=2.0 ## PARAMETERS
 	for a in atomlist1:
 		for b in atomlist2[:2]:
@@ -782,15 +778,15 @@ def HelixConstraints(bluefile):
         	index = (e3cpos-1) - i
         	atomlist2.append( blue.bp_data[index][0] )
         	index = (e4npos+1) + i
-        	atomlist2.append( blue.bp_data[index][0] )	
+        	atomlist2.append( blue.bp_data[index][0] )
 
 	value = 8.0 ; tol=2.0 # PARAMETERS
 	for a in atomlist1:
 		for b in atomlist2:
 			st = PairConstraints(a,b,value,tol) ; lines+=st # Nter of H1 attached to Cter E3 and Nter E4
 
-	
-	return lines	
+
+	return lines
 
 
 def AmbiguousCst(cst_lst):
@@ -834,7 +830,7 @@ def ConstraintsStrandCurvature(**kwargs):
 		else: # non-bulged
 			st = AngleConstraints(pos-2,pos,pos+2,180-bend,bend_tol,"bend%s.%i" %(segment,pos))
 		cst_st += st
-	  
+
 	   pos1 = seg.bp_data[0][0]
 	   pos2 = seg.bp_data[-1][0]
 	   if len(seg.bp_data) % 2 ==0:
@@ -867,7 +863,7 @@ def RegularStrandCurvature(**kwargs):
 	level = kwargs.get("level") # 1 or 2
 
 	bend = kwargs.get("global_bend",None)
-	bend_tol = kwargs.get("global_bend_tol",10.0) 
+	bend_tol = kwargs.get("global_bend_tol",10.0)
         twist = kwargs.get("global_twist",None )
         twist_tol = kwargs.get("global_twist_tol",5.0 )
 
@@ -890,7 +886,7 @@ def RegularStrandCurvature(**kwargs):
 	seg = blue.segment_dict[segment]
 	cst_st=''
 	#################
-	n = len(seg.bp_data)        
+	n = len(seg.bp_data)
 
 	############
 	# BENDING
@@ -923,7 +919,7 @@ def RegularStrandCurvature(**kwargs):
 				if pos==triad[1]: # central position of triad
 					bend_positions_triads.append( triad )
 
-	# By areas					
+	# By areas
 	bend_area_triads=[]
         if bend_area =='n-term':
                 bend_area_triads = [ bend_triads[0] ]
@@ -949,7 +945,7 @@ def RegularStrandCurvature(**kwargs):
 		if i+step < n:
 			pos1 = i
 			pos2 = i + step*1
-			twist_pairs.append([pos1,pos2])       
+			twist_pairs.append([pos1,pos2])
 
 	#----------------------
 	# Define twist areas
@@ -965,17 +961,17 @@ def RegularStrandCurvature(**kwargs):
 			twist_area_pairs = [ pair for pair in twist_pairs[index:index+2] ]
 		else:
 			twist_area_pairs = [ twist_pairs[index] ]
-				
+
 	#########################
 	# INTRODUCE CONSTRAINTS
 	#########################
     	# After indentifying combination of positions for bending and twist... Put constraints
 	# Calculate Bends
 	for triad in bend_triads:
-		a,b,c = triad	
+		a,b,c = triad
 		pos1 = seg.bp_data[b][0]
 		pos2 = seg.bp_data[a][0]
-		pos3 = seg.bp_data[c][0]         
+		pos3 = seg.bp_data[c][0]
 		if bend_positions and triad in bend_positions_triads:
 			print triad
 			st = CstTypeAngleConstraints(pos2,pos1,pos3,180-bend_positions_value,bend_positions_value_tol,constraint_type) ; cst_st += st
@@ -993,14 +989,14 @@ def RegularStrandCurvature(**kwargs):
 		if twist_area_value and pair in twist_area_pairs:
 			st = DihedralConstraints(pos1,pos2,twist_area_value,twist_area_value_tol,'dih%i.%i' %(pos1,pos2)) ; cst_st += st
 		elif twist:
-			st = DihedralConstraints(pos1,pos2,twist,twist_tol,'dih%i.%i' %(pos1,pos2)) ; cst_st += st 
+			st = DihedralConstraints(pos1,pos2,twist,twist_tol,'dih%i.%i' %(pos1,pos2)) ; cst_st += st
 
 	return cst_st
 
 def BulgedStrandCurvature(**kwargs):
 	segment = kwargs.get("strand")
 	bend1 = kwargs.get("bend1",None)
-	bend1_tol = kwargs.get("bend1_tol",5.0) 
+	bend1_tol = kwargs.get("bend1_tol",5.0)
         bend2 = kwargs.get("bend2",None)
         bend2_tol = kwargs.get("bend2_tol",5.0)
 	blue = kwargs.get("blueprint")
@@ -1014,14 +1010,14 @@ def BulgedStrandCurvature(**kwargs):
 	pos2 = pos1+1
 	bulgepos_fromN = pos1-seg.bp_data[0][0]+1
 	bulgepos_fromC = pos1-seg.bp_data[-1][0]-1
-	
+
 
 	# level 1
 	if bend1:
 		if nres > 6 and ( bulgepos_fromN >=3 and bulgepos_fromC <=-4 ):
 			st = CstTypeAngleConstraints(pos1-2,pos1,pos1+3,180-bend1,bend1_tol,constraint_type) ; cst_st += st
 			st = CstTypeAngleConstraints(pos2-3,pos2,pos2+2,180-bend1,bend1_tol,constraint_type) ; cst_st += st
-				
+
 	# level 2
 	if bend2:
 		if nres >=10 and ( bulgepos_fromN >=5 and bulgepos_fromC <=-6 ):
@@ -1034,67 +1030,67 @@ def BulgedStrandCurvature(**kwargs):
 def AbegoPhiPsiConstraints(pos,blue):
     abego = blue.bp_data[pos-1][2][1]
     if abego=="A":
-        phi_min = -180.0 
+        phi_min = -180.0
         phi_max = 0.0
         psi_min = -75.0
         psi_max = 50.0
     if abego=="B":
-        phi_min = -180.0 
+        phi_min = -180.0
         phi_max = 0.0
         psi_min = 50.0
-        psi_max = 285.5        
+        psi_max = 285.5
     if abego=="E":
-        phi_min = 0.0 
+        phi_min = 0.0
         phi_max = 180.5
         psi_min = 100.0
-        psi_max = 260.5       
+        psi_max = 260.5
     if abego=="G":
-        phi_min = 0.0 
+        phi_min = 0.0
         phi_max = 180.5
         psi_min = -100.0
         psi_max = 100.0
     if abego=="S":
-        phi_min = -180.0 
+        phi_min = -180.0
         phi_max = 0.0
         psi_min = 100.0
         psi_max = 195.0
     if abego=="P":
-        phi_min = -180.0 
+        phi_min = -180.0
         phi_max = 0.0
         psi_min = 100.0
         psi_max = 195.0
     if abego=="D":
-        phi_min = -180.0 
+        phi_min = -180.0
         phi_max = 0.0
         psi_min = 195.0
-        psi_max = 285.5        
+        psi_max = 285.5
     if abego=="Z":
-        phi_min = -180.0 
+        phi_min = -180.0
         phi_max = -100.0
         psi_min = 50.0
-        psi_max = 100.0         
+        psi_max = 100.0
     if abego=="Y":
-        phi_min = -100.0 
+        phi_min = -100.0
         phi_max = 0.0
         psi_min = 50.0
-        psi_max = 100.0              
+        psi_max = 100.0
     if abego=="M":
-        phi_min = -180.0 
+        phi_min = -180.0
         phi_max = -90.0
         psi_min = -75.0
-        psi_max = -50.0        
+        psi_max = -50.0
     if abego=="N":
-        phi_min = -90.0 
+        phi_min = -90.0
         phi_max = 0.0
         psi_min = -75.0
         psi_max = -50.0
 
-    st=''        
+    st=''
     #phi_min = np.deg2rad(phi_min)
     #phi_max = np.deg2rad(phi_max)
     #psi_min = np.deg2rad(psi_min)
     #psi_max = np.deg2rad(psi_max)
-    if pos >= 2: 
+    if pos >= 2:
 	    st+="Dihedral C %i N %i CA %i C %i BOUNDED %3.1f %3.1f 0.5 phi_%s\n" %(pos-1,pos,pos,pos,phi_min,phi_max,pos)
     if pos < len(blue.bp_data):
 	    st+="Dihedral N %i CA %i C %i N %i BOUNDED %3.1f %3.1f 0.5 psi_%s\n" %(pos,pos,pos,pos+1,psi_min,psi_max,pos)
@@ -1118,7 +1114,7 @@ def HairpinPairingResidues(blue,segment1,segment2):
     s2 = blue.segment_dict[segment2]
     map1={} ; map2={}
     pairs=[]
-    if Bulged(s1): 
+    if Bulged(s1):
         b1pos = Bulged(s1)
         shift = int(s1.bp_data[-1][0]) - b1pos
         for i in range(len(s2.bp_data)):
@@ -1145,9 +1141,9 @@ def HairpinPairingResidues(blue,segment1,segment2):
                 break
             pairs.append([pos1,pos2])
 
-    if Bulged(s1)==None and Bulged(s2)==None: 
+    if Bulged(s1)==None and Bulged(s2)==None:
          for i in range(len(s2.bp_data)):
-            pos2 = int(s2.bp_data[i][0]) # Antiparallel     
+            pos2 = int(s2.bp_data[i][0]) # Antiparallel
             if i < len(s1.bp_data):
                 pos1 = int(s1.bp_data[-1-i][0])
             else:
@@ -1175,7 +1171,7 @@ def HbondsBulgedStrand(**kwargs):
 		print 'Warning: None of the strands is bulged'
 
 	b1pos = Bulged(seg)
-	
+
 	hblist=[]
 	# to the left of the bulge
 	i=0
@@ -1184,7 +1180,7 @@ def HbondsBulgedStrand(**kwargs):
 	    pos = (b1pos-2)-2*i
 	    i+=1
 	    hblist.append(pos)
-    
+
 	pos = b1pos
 	# to the right of the bulge
 	i=0
@@ -1193,7 +1189,7 @@ def HbondsBulgedStrand(**kwargs):
 	    i+=1
 	    hblist.append(pos)
 
-	hbpairs=[]    
+	hbpairs=[]
 	for pair in pair1:
 	    hbpair = list( set(hblist).intersection(set(pair)) )
 	    if len(hbpair)==1:
@@ -1222,7 +1218,7 @@ def AllSheetSegmentPairs(blue):
         pairs=[]
         pairs.extend(pair1)
         pairs.extend(pair2)
-        pairs.extend(pair3)		
+        pairs.extend(pair3)
 
 	dic_pairs={}
 	for pair in pairs:
@@ -1233,10 +1229,10 @@ def AllSheetSegmentPairs(blue):
 		dic_pairs.setdefault(b,{})
 		dic_pairs[a][seg_b]=b
 		dic_pairs[b][seg_a]=a
-	
-	return dic_pairs		
 
-	
+	return dic_pairs
+
+
 def HbondsRegularHairpin(**kwargs):
         strand1 = kwargs.get('strand1')
         strand2 = kwargs.get('strand2')
@@ -1272,7 +1268,7 @@ def HbondsRegularHairpin(**kwargs):
 
         return cst_st
 
-	
+
 def FlatSheetConstraints(blue):
         cst_st=''
         pair1 = HairpinPairingResidues(blue,'E1','E2')
