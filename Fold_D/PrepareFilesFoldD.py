@@ -6,7 +6,7 @@
 # USE: python build_blueprints.v2.py -xml template_bb+design.xml -blueresfile
 
 import sys
-sys.path.append("/Users/basantab/DeNovoCurvedSheetDesign")
+sys.path.append("../")
 
 import itertools
 from argparse import ArgumentParser
