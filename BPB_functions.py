@@ -28,6 +28,10 @@ def Bulged(strand):
         return bulgepos
 
 def MakePlainBlueprint(ss,comb,bluefile):
+        """
+        Generates the first blueprint, which serves as a guide for placing bulges
+        in the following steps
+        """
         c = comb
         out_file = open(bluefile,'w')
         struct = {'H':'HA', 'E':'EB', 'L':'LA'}
@@ -41,9 +45,11 @@ def MakePlainBlueprint(ss,comb,bluefile):
                 out_file.write('0  V  %s  R\n' %(curr_ss))
         out_file.close()
 
-#------------
 def MakeRefBlueprint(ss,comb,bulges,**kwargs):
-	refbluefile = kwargs.get('refblue')
+        """
+        Generates reference blueprint at the beginning of the process
+        """
+        refbluefile = kwargs.get('refblue')
         c = comb
         out_file = open(refbluefile,'w')
         struct = {'H':'HA', 'E':'EB', 'L':'LA'}
@@ -66,10 +72,11 @@ def MakeRefBlueprint(ss,comb,bulges,**kwargs):
        	                        if j == bulges[seg.id]-1:
        	                                res[2] = 'EA'
        	blue.dump_blueprint(refbluefile)
-	#os.chdir('../')
 
-#---------------
 def Shift(**kwargs):
+        """
+        Calculates register shifts between strands based on their pairing and length
+        """
         refbluefile = kwargs.get('refblue')
         seg1 = kwargs.get('seg1')
         seg2 = kwargs.get('seg2')
@@ -78,19 +85,23 @@ def Shift(**kwargs):
         nseg2 = len( refblue.segment_dict[seg2].bp_data )
         shift = nseg1 - nseg2
         return shift
-#---------------
-def MakeFirstBlueprint(**kwargs):
-	tail = [[0, 'V', 'L', 'R']]
-	refbluefile = kwargs.get('refblue')
-	segments = kwargs.get('segments')
-	specific_abego = kwargs.get('specific_abego')
-	newbluefile = kwargs.get('newblue')
-	ss_pairing = kwargs.get('ss_pairing')
-	hs_pairing = kwargs.get('hs_pairing')
-	hh_pairing = kwargs.get('hh_pairing')
-	seg_adapt = kwargs.get('adapt')
 
-	refblue = Blueprint(refbluefile)
+def MakeFirstBlueprint(**kwargs):
+        """
+        Generates the first blueprint in the protein assembly process. This blueprint
+        contains only the two central strands in the sheet
+        """
+        tail = [[0, 'V', 'L', 'R']]
+        refbluefile = kwargs.get('refblue')
+        segments = kwargs.get('segments')
+        specific_abego = kwargs.get('specific_abego')
+        newbluefile = kwargs.get('newblue')
+        ss_pairing = kwargs.get('ss_pairing')
+        hs_pairing = kwargs.get('hs_pairing')
+        hh_pairing = kwargs.get('hh_pairing')
+        seg_adapt = kwargs.get('adapt')
+
+        refblue = Blueprint(refbluefile)
 
         seg1 = seg_adapt.keys()[0] # strand to adapt
         seg2 = seg_adapt[seg1] # referemce strand
@@ -172,8 +183,6 @@ def MakeFirstBlueprint(**kwargs):
 	# Abego 'B' for building strand
 	os.system("sed  's/ E / EB/g;s/ H / HA/g' %s > %s.b" %(newbluefile,newbluefile))
 
-
-#-------------------
 def AddSegmentToBlueprint(**kwargs):
 	tail = [[0, 'V', 'L', 'R']]
 	refbluefile = kwargs.get('refblue')
