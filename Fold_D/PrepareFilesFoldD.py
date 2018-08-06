@@ -48,7 +48,7 @@ for comb in combinations:
 	for i,s in enumerate(ss):
 		filename+='%s%i' %(ss[i],comb[i])
 
-	# First build a plain blueprint file to after creat a bp object to make easier the bulge combinations
+	# First build a plain blueprint file to after create a bp object to make easier the bulge combinations
 
 	MakePlainBlueprint(ss,comb,'bp')
 	blue = Blueprint('bp')
@@ -211,7 +211,7 @@ for comb in combinations:
 			R_in_bp1= "-parser:script_vars R_in_bp1=%d-%d\n"%(r_res[0],r_res[-1]) ; flags_out.write(R_in_bp1)
 			cst1_name = "-parser:script_vars cst1=../cst1\n" ; flags_out.write(cst1_name)
 			cst1_min_name = "-parser:script_vars cst1_min=../cst1_min\n" ; flags_out.write(cst1_min_name)
-
+			flags_out.write('-restore_talaris_behavior\n')
 			sthb = HbondsRegularHairpin(strand1="E1",strand2="E2",blueprint=blue) ; fileout.write(sthb)
 
 			fileout.write(st1) ; fileout.write(st2) # ; fileout.write(st11) ; fileout.write(st22)

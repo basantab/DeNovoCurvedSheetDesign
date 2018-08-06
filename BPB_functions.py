@@ -184,6 +184,9 @@ def MakeFirstBlueprint(**kwargs):
 	os.system("sed  's/ E / EB/g;s/ H / HA/g' %s > %s.b" %(newbluefile,newbluefile))
 
 def AddSegmentToBlueprint(**kwargs):
+        """
+        Generates subsequent blueprints, adding secondary structure elements
+        """
 	tail = [[0, 'V', 'L', 'R']]
 	refbluefile = kwargs.get('refblue')
 	segments = kwargs.get('segments')
@@ -271,8 +274,6 @@ def AddSegmentToBlueprint(**kwargs):
                         n2 = len( refblue.segment_dict[s2].bp_data )
                 #------
 
-                #if orient == 'A':
-                #shift = n1-n2
 		shift=99
 		if npairs==0:
                         ss_line += '%s-%s.%s.%s' %(int(s1[1:]),int(s2[1:]),orient,shift)
@@ -302,21 +303,13 @@ def AddSegmentToBlueprint(**kwargs):
                 shift = insert[seg]
                 blue = Blueprint('%s' %(newbluefile))
                 blue_aux = copy.deepcopy(blue)
-        #       print blue.segment_dict[seg].bp_data
                 blue_aux.reindex_blueprint()
                 insert_index = blue_aux.segment_dict[seg].bp_data[-1][0] # we want to insert just before the 1st residue of the next seg, so that we insert at the very end
 
                 for k in range(shift):
                         blue.bp_data.insert(insert_index, [0, 'V', 'E', 'R'])
-        #       print blue.segment_dict[seg].bp_data
-
-		# FOR NEW CONSTRAINTS WE NEED 7 RESIDUES TO USE BEND CONSTRAINTS (5 + 2 INSERTED)
-		#for i in range(1,5+1):
-		#	blue.segment_dict[seg].bp_data[-i][3]='R'
 
                 blue.dump_blueprint(newbluefile,header_lines=header)
-
-
 
 	# abego loop
 	# Adapt global abego motif to current stage
@@ -395,8 +388,10 @@ def AddSegmentToBlueprint(**kwargs):
 	# Abego 'B' for building strand
 	os.system("sed  's/ E / EB/g;s/ H / HA/g' %s > %s.b" %(newbluefile,newbluefile))
 
-#-------------------
 def write_dummy_pdb(filename):
+    """
+    Creates initial dummy PDB file that is used by the blueprint build mover
+    """
     dummy_pdb = 'ATOM      1  N   GLY A   1       0.346   1.210   0.744  1.00  0.00 \n\
 ATOM      2  CA  GLY A   1       1.687   1.135   0.174  1.00  0.00 \n\
 ATOM      3  C   GLY A   1       2.383   2.488   0.222  1.00  0.00 \n\
@@ -419,6 +414,9 @@ ATOM     19 2HA  GLY A  2       0.540   8.749  -1.379  1.00  0.00 \n'
     out.write(dummy_pdb)
 
 def Bulges(blue):
+        """
+        Returns all bulges in strainds
+        """
         bulge_list=[]
         for i,res in enumerate(blue.bp_data):
                 if res[2]=='EA':
@@ -426,6 +424,9 @@ def Bulges(blue):
         return bulge_list
 
 def XMLReplaceXXXYYY(**kwargs):
+        """
+        Replaces strings in XML lines.
+        """
         xml_lines = kwargs.get('xml_lines')
         identifier = kwargs.get('identifier')
         xxx = kwargs.get('xxx')
@@ -444,81 +445,13 @@ def XMLReplaceXXXYYY(**kwargs):
 
 			if zzz:
 				line = line.replace('zzz','%s' %(zzz))
-				xml_lines[i] = line
-	#return xml_lines
 
-def XMLReplaceTagsValues(**kwargs):
-        xml_lines = kwargs.get('xml_lines')
-        identifier = kwargs.get('identifier')
-        tags = kwargs.get('tags')
-        values = kwargs.get('values')
-
-        for i,line in enumerate(xml_lines):
-                if identifier in line:
-			for tag,value in zip(tags,values):
-				line = line.replace('%s' %(tag),'%s' %(value))
-				xml_lines[i] = line
-
-
-def XMLReplaceString(**kwargs):
-        xml_in = kwargs.get('xml_in')
-        xml_out = kwargs.get('xml_out')
-        identifier = kwargs.get('identifier')
-        string = kwargs.get('string')
-        filein = open(xml_in,'r')
-        fileout = open(xml_out,'w')
-        for line in filein:
-                if identifier in line:
-                        line = line.replace('xxx','%s' %(string))
-                fileout.write(line)
-        filein.close()
-        fileout.close()
-
-def XMLAtomsDistance(**kwargs):
-        xml_in = kwargs.get('xml_in')
-        xml_out = kwargs.get('xml_out')
-        identifier = kwargs.get('identifier')
-        res_i = kwargs.get('res_i')
-        res_j = kwargs.get('res_j')
-
-        filein = open(xml_in,'r')
-        fileout = open(xml_out,'w')
-        for line in filein:
-                if identifier in line:
-                        line = line.replace('xxx','%s' %(res_i))
-                        line = line.replace('yyy','%s' %(res_j))
-                fileout.write(line)
-        filein.close()
-        fileout.close()
-
-def XMLSegmentAtomDistance(**kwargs):
-        xml_in = kwargs.get('xml_in')
-        xml_out = kwargs.get('xml_out')
-        bluefile = kwargs.get('blue')
-        identifier = kwargs.get('identifier')
-        compound_name = kwargs.get('compound_name')
-        segment = kwargs.get('segment')
-        resid = kwargs.get('resid')
-        blue = Blueprint(bluefile)
-        blue.reindex_blueprint(start=1)
-        seg = blue.segment_dict[segment]
-        fileout = open(xml_out,'w')
-        for line in open(xml_in):
-                if identifier in line:
-                        fileout.write(line)
-                        for j,res in enumerate(seg.bp_data):
-                                line2 = '\t\t<AtomicDistance name="cn%i" residue1=%i residue2=%i atomname1=O atomname2=N distance=4.0 confidence=1 />\n' %(j,resid,res[0]) # 1:bulge ; 2:loop
-
-                                fileout.write(line2)
-                        # write compount statement
-                        fileout.write( '\n\t\t<CompoundStatement name=%s >\n' %(compound_name) )
-                        for k in range(j+1):
-                                fileout.write( '\t\t\t<OR filter_name=cn%i />\n' %(k) )
-                        fileout.write( '\t\t</CompoundStatement>' )
-                else:
-                        fileout.write(line)
 
 def AmbiguousConstraints(list1,list2):
+        """
+        Returns the string declaring ambigous constraints between
+        all atoms N of residues in list1 and O atoms of residues in list2
+        """
 	st='AmbiguousConstraint\n'
 	for res1 in list1:
 		for res2 in list2:
@@ -526,11 +459,10 @@ def AmbiguousConstraints(list1,list2):
 	st+='END_AMBIGUOUS\n'
 	return st
 
-def ReplaceLine(line,word1,word2):
-	if word1 in line:
-		line.replace(word1,word2)
-
 def MotifTopology(topol,motif_filename):
+        """
+        Deprecated function
+        """
 	elements = re.compile("[HEL]")
 	ss = elements.findall(topol)
 	relengths = re.compile("(\d+)-(\d+)")
@@ -599,6 +531,9 @@ def MotifTopology(topol,motif_filename):
 	return ss,combinations, dic_abego
 
 def GetCombinations(topol):
+        """
+        Generates a list with all combinations of lengths of secondary structure elements
+        """
 	elements = re.compile("[HEL]")
 	ss = elements.findall(topol)
 	relengths = re.compile("(\d+)-(\d+)")
@@ -630,7 +565,11 @@ def GetCombinations(topol):
 	print 'Number of combinations: %s' %(len(combinations))
 	return ss,combinations
 
-def HBondConstraints(donor,acceptor): # return string for cst file
+def HBondConstraints(donor,acceptor):
+    """
+    Returns string for backbone H-bond constraints between donor residue and
+    acceptor residue
+    """
     hb_ang = np.deg2rad(160.)
     hb_ang_tol=np.deg2rad(20.0)
     #hb_ang_tol=np.deg2rad(30.0)
@@ -640,7 +579,12 @@ def HBondConstraints(donor,acceptor): # return string for cst file
     st+= "Angle H %i O %i C %i HARMONIC %3.1f %3.1f\n" %(donor,acceptor,acceptor,hb_ang,hb_ang_tol)
     return st
 
-def CircularHBondConstraints(donor,acceptor): # return string for cst file
+def CircularHBondConstraints(donor,acceptor):
+    """
+    Returns string for backbone H-bond constraints between donor residue and
+    acceptor residue, with angles angles around 360 and 0 being counted as a
+    continuum
+    """
     hb_ang = np.deg2rad(180.)
     #hb_ang_tol=np.deg2rad(20.0) -> original
     hb_ang_tol=np.deg2rad(30.0)
@@ -650,11 +594,21 @@ def CircularHBondConstraints(donor,acceptor): # return string for cst file
     st+= "Angle H %i O %i C %i CIRCULARHARMONIC %3.1f %3.1f\n" %(donor,acceptor,acceptor,hb_ang,hb_ang_tol)
     return st
 
-def PairConstraints(a,b,value,tol,tag): # return string for cst file
+def PairConstraints(a,b,value,tol,tag):
+    """
+    Returns properly formated string for declaring flat-bottomed distance constraints
+    between CA carbons of resiedues a and b, at distance "value", and "tol" flat bottom
+    width.
+    """
     st = "AtomPair CA %i CA %i BOUNDED %3.1f %3.1f %3.1f 0.5 %s\n" %(a,b,value-tol,value+tol,tol/2,tag)
     return st
 
-def HarmonicPairConstraints(a,b,value,sd): # return string for cst file
+def HarmonicPairConstraints(a,b,value,sd):
+    """
+    Returns properly formated string for declaring flat-bottomed distance constraints
+    between CA carbons of resiedues a and b, at distance "value", and "tol" flat bottom
+    width.
+    """
     st = "AtomPair CA %i CA %i HARMONIC %3.1f %3.1f\n" %(a,b,value,sd)
     return st
 
