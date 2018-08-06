@@ -605,28 +605,42 @@ def PairConstraints(a,b,value,tol,tag):
 
 def HarmonicPairConstraints(a,b,value,sd):
     """
-    Returns properly formated string for declaring flat-bottomed distance constraints
-    between CA carbons of resiedues a and b, at distance "value", and "tol" flat bottom
-    width.
+    Returns properly formated string for declaring harmonic distance constraints
+    between CA carbons of resiedues a and b, at distance "value", and "sd" standard deviation.
     """
     st = "AtomPair CA %i CA %i HARMONIC %3.1f %3.1f\n" %(a,b,value,sd)
     return st
 
 
-def AngleConstraints(a,b,c,value,tol,tag): # return string for cst file
+def AngleConstraints(a,b,c,value,tol,tag):
+    """
+    Returns properly formated string for declaring flat-bottomed angle constraints
+    between CA carbons of resiedues a, b and c, at angle "value", and "tol" flat bottom
+    width.
+    """
     ang = np.deg2rad(value)
     ang_tol = np.deg2rad(tol)
     st = "Angle CA %i CA %i CA %i BOUNDED %3.1f %3.1f 0.5 %s\n" %(a,b,c,ang-ang_tol,ang+ang_tol,tag)
     return st
 
-def HarmonicAngleConstraints(a,b,c,value,tol): # return string for cst file
+def HarmonicAngleConstraints(a,b,c,value,tol):
+    """
+    Returns properly formated string for declaring harmonic angle constraints
+    between CA carbons of resiedues a, b and c, at angle "value", and "tol" standard
+    deviation. An angle of 360 is treated as being next to 0 (CIRCULARHARMONIC).
+    """
     ang = np.deg2rad(value)
     ang_tol = np.deg2rad(tol)
     st = "Angle CA %i CA %i CA %i CIRCULARHARMONIC %3.1f %3.1f\n" %(a,b,c,ang,ang_tol)
     return st
 
 
-def CstTypeAngleConstraints(a,b,c,value,tol,cst_type): # return string for cst file
+def CstTypeAngleConstraints(a,b,c,value,tol,cst_type):
+    """
+    Returns properly formated string for declaring 'harmonic' or 'bounded'
+    angle constraints between CA carbons of resiedues a, b and c, at angle "value",
+    and "tol" standard deviation (harmonic) or flat bottom width (bounded).
+    """
     st=''
     if cst_type=='harmonic':
 	    ang = np.deg2rad(value)
@@ -640,14 +654,24 @@ def CstTypeAngleConstraints(a,b,c,value,tol,cst_type): # return string for cst f
 	    st = "Angle CA %i CA %i CA %i BOUNDED %3.2f %3.2f %3.2f 0.5 %s\n" %(a,b,c,ang-ang_tol,ang+ang_tol,sd,tag)
     return st
 
-def DihedralConstraints(a,b,value,tol,tag): # return string for cst file
+def DihedralConstraints(a,b,value,tol,tag):
+    """
+    Returns properly formated string for declaring flat-bottomed (bounded)
+    dihedral angle constraints between CBa-CAa-CAb-CBb carbons of resiedues
+    a and b at angle "value", and "tol" flat bottom width.
+    """
     ang = np.deg2rad(value)
     ang_tol = np.deg2rad(tol)
     sd = ang_tol/2
     st = "Dihedral CB %i CA %i CA %i CB %i BOUNDED %3.2f %3.2f %3.2f 0.5 %s\n" %(a,a,b,b,ang-ang_tol,ang+ang_tol,sd,tag)
     return st
 
-def CaDihedralConstraints(a,b,c,d,value,tol): # return string for cst file
+def CaDihedralConstraints(a,b,c,d,value,tol):
+    """
+    Returns properly formated string for declaring flat-bottomed (bounded)
+    dihedral angle constraints between CA carbons of resiedues
+    a, b, c and d at angle "value", and "tol" flat bottom width.
+    """
     ang = np.deg2rad(value)
     ang_tol = np.deg2rad(tol)
     sd = ang_tol/2
@@ -655,25 +679,48 @@ def CaDihedralConstraints(a,b,c,d,value,tol): # return string for cst file
     st = "Dihedral CA %i CA %i CA %i CA %i BOUNDED %3.2f %3.2f %3.2f 0.5 %s\n" %(a,b,c,d,ang-ang_tol,ang+ang_tol,sd,tag)
     return st
 
-def CircularHarmonicCaDihedralConstraints(a,b,c,d,value,tol): # return string for cst file
+def CircularHarmonicCaDihedralConstraints(a,b,c,d,value,tol):
+    """
+    Returns properly formated string for declaring harmonic
+    dihedral angle constraints between CA carbons of resiedues
+    a, b, c and d at angle "value", and "tol" standard deviation.
+    Angles of 0 and 360 are treated as being next to each other.
+    """
     ang = np.deg2rad(value)
     ang_tol = np.deg2rad(tol)
     st = "Dihedral CA %i CA %i CA %i CA %i CIRCULARHARMONIC %3.1f %3.1f\n" %(a,b,c,d,ang,ang_tol)
     return st
 
-def HarmonicDihedralConstraints(a,b,value,tol): # return string for cst file
+def HarmonicDihedralConstraints(a,b,value,tol):
+    """
+    Returns properly formated string for declaring harmonic
+    dihedral angle constraints between CBa-CAa-CAb-CBb carbons of resiedues
+    a and b at angle "value", and "tol" standard deviation.
+    """
     ang = np.deg2rad(value)
     ang_tol = np.deg2rad(tol)
     st = "Dihedral CB %i CA %i CA %i CB %i HARMONIC %3.1f %3.1f\n" %(a,a,b,b,ang,ang_tol)
     return st
 
-def CircularHarmonicDihedralConstraints(a,b,value,tol): # return string for cst file
+def CircularHarmonicDihedralConstraints(a,b,value,tol):
+    """
+    Returns properly formated string for declaring harmonic
+    dihedral angle constraints between CBa-CAa-CAb-CBb carbons of resiedues
+    a and b at angle "value", and "tol" standard deviation.
+    Angles of 0 and 360 are treated as being next to each other.
+    """
     ang = np.deg2rad(value)
     ang_tol = np.deg2rad(tol)
     st = "Dihedral CB %i CA %i CA %i CB %i CIRCULARHARMONIC %3.1f %3.1f\n" %(a,a,b,b,ang,ang_tol)
     return st
 
 def PerfectHelixCst(bluefile,helixn):
+        """
+        Returns properly formated string for declaring harmonic dihedral angle
+        constraints for PHI and PSI angles of all residues of helix number 'helixn',
+        forcing them in the most abundant helical conformation (straight helix).
+        It leaves out the PHI of the first helix residue and the PSI os the last one.
+        """
 	blue = Blueprint(bluefile)
         blue.reindex_blueprint(start=1)
         hnum = 'H'+str(helixn)
@@ -757,14 +804,6 @@ def AmbiguousCst(cst_lst):
         for cst in cst_lst:
                 header += cst
         header += 'END_AMBIGUOUS\n'
-        return header
-
-
-def MultiCst(cst_lst):
-        header = 'MultiConstraint\n'
-        for cst in cst_lst:
-                header += cst
-        header += 'END_MULTI\n'
         return header
 
 def ConstraintsStrandCurvature(**kwargs):
@@ -1271,4 +1310,4 @@ def FlatSheetConstraints(blue):
         return cst_st
 
 if __name__ == '__main__':
-	print "This is not the file you are looking for"
+	print "Functions for building curved beta sheets"
