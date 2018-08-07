@@ -715,25 +715,29 @@ def CircularHarmonicDihedralConstraints(a,b,value,tol):
     return st
 
 def PerfectHelixCst(bluefile,helixn):
-        """
-        Returns properly formated string for declaring harmonic dihedral angle
-        constraints for PHI and PSI angles of all residues of helix number 'helixn',
-        forcing them in the most abundant helical conformation (straight helix).
-        It leaves out the PHI of the first helix residue and the PSI os the last one.
-        """
-	blue = Blueprint(bluefile)
-        blue.reindex_blueprint(start=1)
-        hnum = 'H'+str(helixn)
-	H = blue.segment_dict[hnum]
-        HN = int(H.bp_data[0][0])
-        HC = int(H.bp_data[-1][0])
-        cst = ''
-        cst += "Dihedral N %i CA %i C %i N %i HARMONIC -0.78 0.09 \n" %(HN,HN,HN,HN+1) #psi
-	for pos in range(HN+1,HC-1):
-		cst += "Dihedral C %i N %i CA %i C %i HARMONIC -1.05 0.09 \n" %(pos-1,pos,pos,pos) #phi
-		cst += "Dihedral N %i CA %i C %i N %i HARMONIC -0.78 0.09 \n" %(pos,pos,pos,pos+1) #psi
-	cst += "Dihedral C %i N %i CA %i C %i HARMONIC -1.05 0.09 \n" %(HC-1,HC,HC,HC) #phi
-        return cst
+    """
+    Returns properly formated string for declaring harmonic dihedral angle
+    constraints for PHI and PSI angles of all residues of helix number 'helixn',
+    forcing them in the most abundant helical conformation (straight helix).
+    It leaves out the PHI of the first helix residue and the PSI os the last one.
+    """
+    blue = Blueprint(bluefile)
+    blue.reindex_blueprint(start=1)
+    hnum = 'H'+str(helixn)
+    H = blue.segment_dict[hnum]
+    HN = int(H.bp_data[0][0])
+    HC = int(H.bp_data[-1][0])
+    cst = ''
+    #cst += "Dihedral N %i CA %i C %i N %i HARMONIC -0.78 0.09 \n" %(HN,HN,HN,HN+1) #psi
+    cst += "Dihedral N %i CA %i C %i N %i HARMONIC -0.78 0.87 \n" %(HN,HN,HN,HN+1) #psi
+    for pos in range(HN+1,HC-1):
+		    #cst += "Dihedral C %i N %i CA %i C %i HARMONIC -1.05 0.09 \n" %(pos-1,pos,pos,pos) #phi
+		    #cst += "Dihedral N %i CA %i C %i N %i HARMONIC -0.78 0.09 \n" %(pos,pos,pos,pos+1) #psi
+            cst += "Dihedral C %i N %i CA %i C %i HARMONIC -1.05 0.87 \n" %(pos-1,pos,pos,pos) #phi
+            cst += "Dihedral N %i CA %i C %i N %i HARMONIC -0.78 0.87 \n" %(pos,pos,pos,pos+1) #psi
+            #cst += "Dihedral C %i N %i CA %i C %i HARMONIC -1.05 0.09 \n" %(HC-1,HC,HC,HC) #phi
+    cst += "Dihedral C %i N %i CA %i C %i HARMONIC -1.05 0.87 \n" %(HC-1,HC,HC,HC) #phi
+    return cst
 
 def HelixConstraints(bluefile):
 	blue = Blueprint(bluefile)
