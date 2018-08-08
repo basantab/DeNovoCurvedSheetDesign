@@ -149,8 +149,8 @@
                                               min_seq_sep="3" max_distance="10.0" cst_weight="1.0"
                                               CA_only="1" residue_selector="not_rebuild_s1"/>
     -->
-    <SetSecStructEnergies name="set_ssene1" scorefxn="SFXN1" blueprint="%%bp1%%" />
-    <BluePrintBDR name="bdr1" scorefxn="SFXN1" use_abego_bias="1" blueprint="%%bp1%%" constraint_file="%%cst1%%"/>
+    <SetSecStructEnergies name="set_ssene1" scorefxn="SFXN1" blueprint="%%bp1.b%%" />
+    <BluePrintBDR name="bdr1" scorefxn="SFXN1" use_abego_bias="1" blueprint="%%bp1.b%%" constraint_file="%%cst1%%"/>
     <ConstraintSetMover name="addcst1" add_constraints="1" cst_file="%%cst1_min%%"/>
     <PackRotamersMover name="design_loops_s1" scorefxn="talaris" task_operations="repack_s1,design_loops_and_flanking_s1"/>
     <ParsedProtocol name="cenmin1" >
@@ -538,7 +538,7 @@
                          secstruct="%%s6_SS%%" use_dssp="False"/>
     <OperateOnResidueSubset name="repack_s6" selector="not_loops_or_flanking_s6" > <RestrictToRepackingRLT/> </OperateOnResidueSubset>
     <OperateOnResidueSubset name="not_des_nterm" selector="not_rebuild_s6" > <PreventRepackingRLT/> </OperateOnResidueSubset>
-  </TASKOPERATIONS>  
+  </TASKOPERATIONS>
   <!-- Step #6 FILTERS -->
   <FILTERS>
     <AverageDegree name="avdeg_nterm" threshold="16.00" distance_threshold="10.0" task_operations="not_des_nterm" confidence="1"/>
@@ -554,11 +554,11 @@
     <HelixBendFilter name="hbend2_s6" threshold="155.0" blueprint="%%bp6.b%%" HelixID="2" confidence="1" />
     <HelixKink name="hkink6" bend="20" blueprint="%%bp6.b%%"/>
     <AverageDegree name="avdeg5" threshold="15.0" distance_threshold="10.0" confidence="0"/>
-    
+
     <!--Prevent H2 from pointing downwards-->
     <StrandHelixGeometryFilter name="H2S4_5_angle" StrandID1="4" StrandID2="5" HelixID="2" min_dist="-22.0" max_dist="-16.5" min_ortho_angle="-180" max_ortho_angle="180"
 			       min_plane_angle="150" max_plane_angle="180" blueprint="%%bp6.b%%" output_type="dist" confidence="1"/>
-    
+
     <!--Prevent H1 from being too far or too close to sheet-->
     <StrandHelixGeometryFilter name="H1S4_angle" StrandID1="4" StrandID2="5" HelixID="1" min_dist="-14.5" max_dist="-12" min_ortho_angle="95" max_ortho_angle="105"
 			       min_plane_angle="-10" max_plane_angle="10" blueprint="%%bp6.b%%" output_type="dist" confidence="1"/>
@@ -574,7 +574,7 @@
       <AND filter_name="hbend1" />
       <AND filter_name="hbend2_s6" />
       <!--AND filter_name="dist6a" /-->
-      <!--AND filter_name="dist6b" /--> 
+      <!--AND filter_name="dist6b" /-->
       <!--AND filter_name="dist6c" /-->
       <!--AND filter_name="dist6d" /-->
       <!--AND filter_name="dist6e" /-->
@@ -629,15 +629,15 @@
       <Add mover_name="polyval"/>
       <Add mover_name="rmcst" />
       <Add mover_name="cenmin6" />
-      <!--Add mover_name="pmm"/-->				               
+      <!--Add mover_name="pmm"/-->
       <Add mover_name="dssp" />
     </ParsedProtocol>
-    <LoopOver name="loop6" mover_name="bdr6ss" filter_name="secst6" drift="0" iterations="20" ms_whenfail="FAIL_DO_NOT_RETRY"/>	  
+    <LoopOver name="loop6" mover_name="bdr6ss" filter_name="secst6" drift="0" iterations="20" ms_whenfail="FAIL_DO_NOT_RETRY"/>
   </MOVERS>
-  
+
   <APPLY_TO_POSE>
   </APPLY_TO_POSE>
-  
+
   <PROTOCOLS>
     <Add mover_name="polyval" />
     <!-- Step #1 -->

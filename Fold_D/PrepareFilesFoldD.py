@@ -498,14 +498,15 @@ for comb in combinations:
 			st = PairConstraints(h1n,e3c+3,8,3,"H1E3") ; fileout.write(st); fileoutb.write(st);
 			st = AngleConstraints(h1c-6,h1c+1,h2c,30,8,"E6H4") ; fileout.write(st); fileoutb.write(st);
 
-                        st = "AtomPair N %i O %i HARMONIC 2.3 0.3\n" %(h1c+1,h1c-2) ; fileout.write(st); fileoutb.write(st);
-                        st = "AtomPair N %i O %i HARMONIC 2.5 0.3\n" %(h1c+1,h1c-3) ; fileout.write(st); fileoutb.write(st);
+			st = "AtomPair N %i O %i HARMONIC 2.3 0.3\n" %(h1c+1,h1c-2) ; fileout.write(st); fileoutb.write(st);
+			st = "AtomPair N %i O %i HARMONIC 2.5 0.3\n" %(h1c+1,h1c-3) ; fileout.write(st); fileoutb.write(st);
 
 			#Enforce ABEGO at positions 27 and 28:
-                        l3 = blue.segment_dict['L3']
-                        l3N = int(l3.bp_data[0][0])
-                        st = AbegoPhiPsiConstraints(l3N,blue) ; fileout.write(st) ; fileoutb.write(st);
-                        st = AbegoPhiPsiConstraints(l3N+1,blue) ; fileout.write(st) ; fileoutb.write(st);
+			l3 = blue.segment_dict['L3']
+			l3N = int(l3.bp_data[0][0])
+
+			#st = AbegoPhiPsiConstraints(l3N,blue) ; fileout.write(st) ; fileoutb.write(st);
+            #st = AbegoPhiPsiConstraints(l3N+1,blue) ; fileout.write(st) ; fileoutb.write(st);
 
 			## Done with constraints
                         fileout.close()
@@ -531,6 +532,8 @@ for comb in combinations:
 			H1C_r1 = "-parser:script_vars H1C_r1=%s\n"%(str(h1c)) ; flags_out.write(H1C_r1)
 			H1C_r2 = "-parser:script_vars H1C_r2=%s\n"%(str(loop6)) ;flags_out.write(H1C_r2)
 			H1C_dist = "-parser:script_vars H1C_dist=%s\n"%("11.0") ;flags_out.write(H1C_dist)
+			flags_out.write("-picking_old_max_score 1\n")
+			flags_out.write("-rama_map ../../../Rama_XPG_3level.txt\n")
 			flags_out.close()
 			#-----------------------
 			# Write modified xml
