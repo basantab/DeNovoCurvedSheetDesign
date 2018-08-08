@@ -10,3 +10,7 @@ BPB_functions.py: Library of functions for working with curved sheet protein bac
 SheetGenerationProtocolTemplate.xml: Template Rosetta XML protocol input for different fold designs
 - [ ] Add comments
 - [ ] Remove extra lines and comments
+
+Fold files:
+
+- [ ] Change coordinate constraints to distance constraints?
