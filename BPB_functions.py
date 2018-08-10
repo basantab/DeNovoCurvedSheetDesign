@@ -1092,10 +1092,10 @@ def AbegoPhiPsiConstraints(pos,blue):
         psi_max = -50.0
 
     st=''
-    #phi_min = np.deg2rad(phi_min)
-    #phi_max = np.deg2rad(phi_max)
-    #psi_min = np.deg2rad(psi_min)
-    #psi_max = np.deg2rad(psi_max)
+    phi_min = np.deg2rad(phi_min)
+    phi_max = np.deg2rad(phi_max)
+    psi_min = np.deg2rad(psi_min)
+    psi_max = np.deg2rad(psi_max)
     if pos >= 2:
 	    st+="Dihedral C %i N %i CA %i C %i BOUNDED %3.1f %3.1f 0.5 phi_%s\n" %(pos-1,pos,pos,pos,phi_min,phi_max,pos)
     if pos < len(blue.bp_data):
