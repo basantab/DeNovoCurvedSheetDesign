@@ -19,7 +19,9 @@ Visit https://www.rosettacommons.org/docs/latest/Home for instructions on how to
 
 <code>$ ./run.sh </your/rosetta/exec/folder/rosetta_scripts.os.release> <runtime_in_sec></code>
 
-<strong>General details of PrepareFilesFold*.py and :</strong>
+<strong>General details of PrepareFilesFold*.py and Fold*_SheetGenerationProtocolTemplate.xml	files:</strong>
+
+
 
 <strong>Additional files:</strong>
 
