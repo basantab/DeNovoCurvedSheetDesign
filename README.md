@@ -13,10 +13,11 @@ Visit https://www.rosettacommons.org/docs/latest/Home for instructions on how to
 
 <strong>Use example:</strong>
 
-$ cd Fold_D
+<code>$ cd Fold_D</code>
 
-$ 
+<code>$ ./PrepareFoldD.sh</code>
 
+<code>$ ./run.sh </your/rosetta/exec/folder/rosetta_scripts.os.release> <runtime_in_sec></code>
 
 Blueprint.py: Library by Javier Castellanos for Blueprint object handling.
 
