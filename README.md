@@ -7,7 +7,7 @@ The code used to generate curved sheets following the principles is fully implem
 
 <strong>Obtaining the Rosetta rosetta_scripts app:</strong>
 
-The code in this repository generates all the files necessary for constructing the backbones using the applicatino rosetta_scripts from the RosettaDesign software suit. 
+The code in this repository generates all the files necessary for constructing the backbones using the application rosetta_scripts from the RosettaDesign software suit. 
 
 Visit https://www.rosettacommons.org/docs/latest/Home for instructions on how to obtain and compile the latest version of rosetta_scripts.
 
@@ -21,7 +21,9 @@ Visit https://www.rosettacommons.org/docs/latest/Home for instructions on how to
 
 <strong>General details of PrepareFilesFold*.py and Fold*_SheetGenerationProtocolTemplate.xml	files:</strong>
 
+In each of the folders named after the folds designed in (1), there is a PrepareFilesFold*.py and a Fold*_SheetGenerationProtocolTemplate.xml file. PrepareFilesFold*.py generates blueprint and constraint files that direct the assembly process encoded in the Fold*_SheetGenerationProtocolTemplate.xml file. The backbone construction process is divided in at least four stages: 1) Construction of the two central strands of the main sheet. 2) Construction of the N-terminal flanking bulged strand. 3) Construction of the C-terminal flanking bulged strand. 4) Construction of the N-terminal helix/helices that pack agains the sheet. Step 4 is further divided in smaller steps for construction of more complex folds.
 
+Each of the backbone construction steps is encoded by the same basic set of Rosetta movers and filters (see Fold*_SheetGenerationProtocolTemplate.xml), but uses different input files and values.
 
 <strong>Additional files:</strong>
 
@@ -29,4 +31,10 @@ Blueprint.py: Library by Javier Castellanos for Blueprint object handling.
 
 BPB_functions.py: Library of functions for working with curved sheet protein backbones.
 
-Rama_XPG_3level.txt: A "general" map from phi/psi coordinate to energy -  more populated Ramachandran space is more favorable. All amino acids, except for proline and glycine, have the same values, hence the "general" qualifier. 
+Rama_XPG_3level.txt: A "general" map from phi/psi coordinate to energy -  more populated Ramachandran space is more favorable. Author: Hahnbeom Park. All amino acids, except for proline and glycine, have the same values, hence the "general" qualifier. 
+
+<strong>References:</strong>
+
+(1) Marcos*, E., Basanta*, B., Chidyausiku, T. M., Tang, Y., Oberdorfer, G., Liu, G., ... & Pereira, J. H. (2017). Principles for designing proteins with cavities formed by curved β sheets. Science, 355(6321), 201-206.
+
+*: Indicates co-first authorship
