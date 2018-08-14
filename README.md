@@ -1,5 +1,5 @@
 # DeNovoCurvedSheetDesign
-This repository contains the files necessary to generate most designs in the 2017 paper "Principles for designing proteins with cavities formed by curved beta sheets"
+This repository contains the files necessary to generate most designs in the 2017 paper "Principles for designing proteins with cavities formed by curved beta sheets" (1)
 
 <strong>Overview:</strong>
 
@@ -23,7 +23,9 @@ Visit https://www.rosettacommons.org/docs/latest/Home for instructions on how to
 
 In each of the folders named after the folds designed in (1), there is a PrepareFilesFold*.py and a Fold*_SheetGenerationProtocolTemplate.xml file. PrepareFilesFold*.py generates blueprint and constraint files that direct the assembly process encoded in the Fold*_SheetGenerationProtocolTemplate.xml file. The backbone construction process is divided in at least four stages: 1) Construction of the two central strands of the main sheet. 2) Construction of the N-terminal flanking bulged strand. 3) Construction of the C-terminal flanking bulged strand. 4) Construction of the N-terminal helix/helices that pack agains the sheet. Step 4 is further divided in smaller steps for construction of more complex folds.
 
-Each of the backbone construction steps is encoded by the same basic set of Rosetta movers and filters (see Fold*_SheetGenerationProtocolTemplate.xml), but uses different input files and values.
+Each of the backbone construction steps is encoded by the same basic set of Rosetta movers and filters (see Fold*_SheetGenerationProtocolTemplate.xml), but uses different input files and values. This basic set is structured as a single mover that loops over constrain-guided fragment assembly followed by requirements checking, until all requirements are met or a number of attempts is reached. The constrain-guided fragment assembly is done in "centroid mode", which is basically a representation where side chains are approximated to a single soft sphere, with valine being the closest to the average size. This step also contains additional minimization steps to "pull" the structure together. The requirements checking step (or filtering step) contains a number of filters that change based on the step, but checks at least for Ramachandran outliers or unfavorable peptide bond geometry (e.g., cis peptide bonds). For specific documentation on movers and filtes, see the rosetta_scripts <a href="https://www.rosettacommons.org/docs/latest/scripting_documentation/RosettaScripts/RosettaScripts">wiki</a>.
+
+
 
 <strong>Additional files:</strong>
 
