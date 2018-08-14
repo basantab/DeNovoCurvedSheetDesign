@@ -7,4 +7,4 @@ Blueprint.py: Library by Javier Castellanos for Blueprint object handling.
 
 BPB_functions.py: Library of functions for working with curved sheet protein backbones.
 
-
+Rama_XPG_3level.txt: A "general" map from phi/psi coordinate to energy -  more populated Ramachandran space is more favorable. All amino acids, except for proline and glycine, have the same values, hence the "general" qualifier. 
