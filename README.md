@@ -19,6 +19,10 @@ Visit https://www.rosettacommons.org/docs/latest/Home for instructions on how to
 
 <code>$ ./run.sh </your/rosetta/exec/folder/rosetta_scripts.os.release> <runtime_in_sec></code>
 
+<strong>General details of PrepareFilesFold*.py and :</strong>
+
+<strong>Additional files:</strong>
+
 Blueprint.py: Library by Javier Castellanos for Blueprint object handling.
 
 BPB_functions.py: Library of functions for working with curved sheet protein backbones.
