@@ -552,7 +552,7 @@
       <AND filter_name="Hkink5" />
       <AND filter_name="hbend5" />
       <AND filter_name="distH4Sheet" />
-      <AND filter_name="avdeg_cterm" />
+      <!--AND filter_name="avdeg_cterm" /-->
       <AND filter_name="omega"/>
       <AND filter_name="rama"/>
     </CompoundStatement>

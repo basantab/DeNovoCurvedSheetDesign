@@ -33,7 +33,9 @@ args = parser.parse_args()
 template_xml = args.xml
 motif_filename = args.motif
 abego = args.abego # for L3
-topol = "L[1-1]H[17-17]L[2-2]H[7-7]L[5-5]E[4-4]L[2-2]E[4-4]L[1-1]H[14-14]L[2-2]E[10-10]L[2-2]E[10-10]L[2-2]E[12-12]L[2-2]E[9-9]L[1-1]H[13-13]L[1-1]"
+#topol = "L[1-1]H[15-15]L[2-2]H[7-7]L[5-5]E[4-4]L[2-2]E[4-4]L[1-1]H[10-15]L[1-2]E[11-11]L[2-2]E[10-10]L[2-2]E[12-12]L[2-2]E[10-10]L[1-1]"
+#topol = "L[1-1]H[18-18]L[1-2]H[6-6]L[5-5]E[4-4]L[2-2]E[4-4]L[1-1]H[11,13]L[2-3]E[11-11]L[2-2]E[10-10]L[2-2]E[12-12]L[2-2]E[10-10]L[1-1]"
+topol = "L[1-1]H[17-17]L[2-2]H[7-7]L[5-5]E[4-4]L[2-2]E[4-4]L[1-1]H[14-14]L[2-2]E[10-10]L[2-2]E[10-10]L[2-2]E[12-12]L[2-2]E[9-9]L[2-2]H[8-8]L[1-1]"
 
 if motif_filename:
 
@@ -418,9 +420,9 @@ for comb in combinations:
 			seg3 = blue.segment_dict['E6']
 			seg4 = blue.segment_dict['L9']
 			seg5 = blue.segment_dict['H2']
-			L10 = int(seg4.bp_data[0][0])
+			L10 = int(seg4.bp_data[1][0])
 			E6c = int(seg3.bp_data[-1][0])
-			H4c = int(seg0.bp_data[-6][0])
+			H4c = int(seg0.bp_data[-1][0])
 			E4c = int(seg2.bp_data[-1][0])
 			H3c = int(seg5.bp_data[-1][0])
                         bulge_list = Bulges(blue) ; bulge2 = bulge_list[1]; bulge1 = bulge_list[0]
@@ -434,7 +436,7 @@ for comb in combinations:
 			st = PairConstraints(H4c-1,E4c,5,2,"H4E4b") ; fileout.write(st);
 			#st = PairConstraints(H4c-1,E4c+3,6,2,"H4E4") ; fileout.write(st);
 			print "Strand 5: %d"%(len(seg3.bp_data))
-			st = AngleConstraints(E6c-2,L10,H4c,70,10,"E6H4") ; fileout.write(st); fileoutb.write(st);
+			st = AngleConstraints(E6c-2,L10,H4c,70,7,"E6H4") ; fileout.write(st); fileoutb.write(st);
 			st = PairConstraints(H4c,E4c,8,2,"H4E4c") ; fileoutb.write(st);
 			## Hbonds of linker-bulge between E6 and H5
 			'''
@@ -447,7 +449,6 @@ for comb in combinations:
 
 			# Vars for Stage #5
 			SS_s5 = "-parser:script_vars s5_SS=%s\n" %(''.join([ pos[2][0] for pos in Blueprint('bp5').bp_data])) ; flags_out.write(SS_s5)
-                        #bp5_name = "-parser:script_vars bp5=../bp5\n" ; flags_out.write(bp5_name)
                         bp5b_name = "-parser:script_vars bp5.b=../bp5.b\n" ; flags_out.write(bp5b_name)
                         bp5 = Blueprint('bp5'); r_res = [ i+1 for i,pos in enumerate(bp5.bp_data) if pos[-1] == 'R' ]
                         R_in_bp5= "-parser:script_vars R_in_bp5=%d-%d\n"%(r_res[0],r_res[-1]) ; flags_out.write(R_in_bp5)
