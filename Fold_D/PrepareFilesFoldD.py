@@ -230,8 +230,6 @@ for comb in combinations:
 			s2 = blue.segment_dict['E2']
 
 			st = HbondsBulgedStrand(strand1="E1",strand2="E2",blueprint=blue) ; fileout.write(st)
-			#st = BulgedStrandCurvature(strand="E1",bend2=50,bend2_tol=5.0,blueprint=blue,constraint_type='bounded') ; fileout.write(st)
-
                         # Specifiy movemap for minimization in XML
                         pos1 = s1.bp_data[0]
                         XMLReplaceXXXYYY(xml_lines=xml_lines,identifier='MoveMap2 Flexible',xxx=1, yyy=s2.bp_data[0][0]-1)
@@ -262,15 +260,6 @@ for comb in combinations:
 			# hbonds
 			st = HbondsBulgedStrand(strand1="E3",strand2="E4",blueprint=blue) ; fileout.write(st)
 			st = HbondsRegularHairpin(strand1="E2",strand2="E3",blueprint=blue) ; fileout.write(st)
-
-
-			# csts of bulged E4
-			#st = BulgedStrandCurvature(strand="E4",bend1=60.0,bend1_tol=20.0, blueprint=blue,constraint_type='bounded')  ; fileout.write(st)
-
-			# cst of remodeled E3
-                        #st1 = RegularStrandCurvature(level=2,blueprint=blue,strand='E3',\
-                        #global_twist=50.0,global_twist_tol=35.0 )
-			#fileout.write(st1)
 
 			# Inter-strand twist: E2-E3
 			dic_pairs = AllSheetSegmentPairs(blue)

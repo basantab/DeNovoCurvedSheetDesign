@@ -196,11 +196,6 @@ for comb in combinations:
 			blue = Blueprint('bp1') ; blue.reindex_blueprint(start=1)
 			fileout = open('cst1','w') # E2//E3
 			fileout_min = open('cst1_min','w') # E2//E3
-                        #st11 = RegularStrandCurvature(level=3,blueprint=blue,strand='E1',\
-                        #global_twist=40.0, global_twist_tol=30.0 )
-                        #st22 = RegularStrandCurvature(level=3,blueprint=blue,strand='E2',\
-                        #global_twist=50.0, global_twist_tol=35.0 )
-
 
                         st1 = RegularStrandCurvature(level=2,blueprint=blue,strand='E1',\
                         global_bend=55.0,global_bend_tol=10.0,\
@@ -210,17 +205,7 @@ for comb in combinations:
                         st2 = RegularStrandCurvature(level=2,blueprint=blue,strand='E2',\
 			global_twist=35.0,global_twist_tol=10.0,\
                         global_bend=55.0,global_bend_tol=10.0,constraint_type='bounded' )
-			'''
-			st1 = RegularStrandCurvature(level=2,blueprint=blue,strand='E1',\
-                        global_bend=45.0,global_bend_tol=5.0,\
-                        global_twist=55.0,global_twist_tol=5.0,\
-                        constraint_type='bounded' )
 
-                        st2 = RegularStrandCurvature(level=2,blueprint=blue,strand='E2',\
-                        global_twist=55.0,global_twist_tol=5.0,\
-                        global_bend=45.0,global_bend_tol=5.0,constraint_type='bounded' )
-			# Original: 70 twist, tol 5.0
-			'''
 			# Vars for Stage #1
 			SS_s1 = "-parser:script_vars s1_SS=%s\n" %(''.join([ pos[2][0] for pos in Blueprint('bp1').bp_data])) ; flags_out.write(SS_s1)
 			bp1_name = "-parser:script_vars bp1=../bp1\n" ; flags_out.write(bp1_name)
@@ -248,9 +233,7 @@ for comb in combinations:
 			s2 = blue.segment_dict['E2']
 
 			st = HbondsBulgedStrand(strand1="E1",strand2="E2",blueprint=blue) ; fileout.write(st)
-			#st = BulgedStrandCurvature(strand="E1",bend2=50,bend2_tol=5.0,blueprint=blue,constraint_type='bounded') ; fileout.write(st)
-
-                        # Specifiy movemap for minimization in XML
+			            # Specifiy movemap for minimization in XML
                         pos1 = s1.bp_data[0]
                         XMLReplaceXXXYYY(xml_lines=xml_lines,identifier='MoveMap2 Flexible',xxx=1, yyy=s2.bp_data[0][0]-1)
                         XMLReplaceXXXYYY(xml_lines=xml_lines,identifier='MoveMap2 Rigid',xxx=s2.bp_data[0][0], yyy=blue.bp_data[-1][0])
@@ -279,15 +262,6 @@ for comb in combinations:
 			# hbonds
 			st = HbondsBulgedStrand(strand1="E3",strand2="E4",blueprint=blue) ; fileout.write(st)
 			st = HbondsRegularHairpin(strand1="E2",strand2="E3",blueprint=blue) ; fileout.write(st)
-
-
-			# csts of bulged E4
-			#st = BulgedStrandCurvature(strand="E4",bend1=60.0,bend1_tol=20.0, blueprint=blue,constraint_type='bounded')  ; fileout.write(st)
-
-			# cst of remodeled E3
-                        #st1 = RegularStrandCurvature(level=2,blueprint=blue,strand='E3',\
-                        #global_twist=50.0,global_twist_tol=35.0 )
-			#fileout.write(st1)
 
 			# Inter-strand twist: E2-E3
 			dic_pairs = AllSheetSegmentPairs(blue)

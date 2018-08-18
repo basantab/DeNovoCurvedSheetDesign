@@ -739,137 +739,31 @@ def PerfectHelixCst(bluefile,helixn):
     cst += "Dihedral C %i N %i CA %i C %i HARMONIC -1.05 0.87 \n" %(HC-1,HC,HC,HC) #phi
     return cst
 
-def HelixConstraints(bluefile):
-	blue = Blueprint(bluefile)
-	blue.reindex_blueprint(start=1)
-
-	h1 = blue.segment_dict['H1']
-	h1npos = int(h1.bp_data[0][0])
-	h1cpos = int(h1.bp_data[-1][0])
-
-	h3 = blue.segment_dict['H3']
-	h3npos = int(h3.bp_data[0][0])
-	h3cpos = int(h3.bp_data[-1][0])
-
-	e3 = blue.segment_dict['E3']
-	e3npos = int(e3.bp_data[0][0])
-	e3cpos = int(e3.bp_data[-1][0])
-
-	e4 = blue.segment_dict['E4']
-	e4npos = int(e4.bp_data[0][0])
-	e4cpos = int(e4.bp_data[-1][0])
-
-        lines=''
-
-	# Nter E3
-	atomlist1=[]
-	atomlist1.append( blue.bp_data[e3npos-1][0] )
-	atomlist1.append( blue.bp_data[e3npos-2][0] )
-
-	# cter H1
-	nh1 = len(h1.bp_data)
-	atomlist2=[]
-	for i in range(0,4):
-        	index = (h1cpos-1) - i
-        	atomlist2.append( blue.bp_data[index][0] )
-
-	value = 8.0 ; tol=2.0 ## PARAMETERS
-	for a in atomlist1:
-		for b in atomlist2[:2]:
-			st = PairConstraints(a,b,value,tol) ; lines+=st # C-ter H1 attached to E3 (Nter)
-
-	# nter H1
-	nh1 = len(h1.bp_data)
-	atomlist1=[]
-	for i in range(0,1):
-        	index = (h1npos-1) +  i
-        	atomlist1.append( blue.bp_data[index][0] )
-
-
-	ne3 = len(e3.bp_data)
-	atomlist2=[]
-	for i in range(0,1):
-        	index = (e3cpos-1) - i
-        	atomlist2.append( blue.bp_data[index][0] )
-        	index = (e4npos+1) + i
-        	atomlist2.append( blue.bp_data[index][0] )
-
-	value = 8.0 ; tol=2.0 # PARAMETERS
-	for a in atomlist1:
-		for b in atomlist2:
-			st = PairConstraints(a,b,value,tol) ; lines+=st # Nter of H1 attached to Cter E3 and Nter E4
-
-
-	return lines
 
 
 def AmbiguousCst(cst_lst):
+        """
+        Returns properly formated string for declaring ambiguous constraints,
+        it takes a list of Rosetta-formated constraints string.
+        """
         header = 'AmbiguousConstraint\n'
         for cst in cst_lst:
                 header += cst
         header += 'END_AMBIGUOUS\n'
         return header
 
-def ConstraintsStrandCurvature(**kwargs):
-	segment = kwargs.get("strand")
-	positions = kwargs.get("positions")
-	bend = float( kwargs.get("bend") )
-	bend_tol = float( kwargs.get("bend_tol") )
-	bend_bulge = float( kwargs.get("bend_bulge") )
-        twist = float( kwargs.get("twist") )
-        twist_tol = float( kwargs.get("twist_tol") )
-	bluefile = kwargs.get("bluefile")
-
-	blue = Blueprint(bluefile)
-	blue.reindex_blueprint(start=1)
-	seg = blue.segment_dict[segment]
-	blue = Blueprint(bluefile)
-	cst_st=''
-	# bending
-	if bend:
-	   if positions == None:
-		positions = range( 2,len(seg.bp_data)-2)
-           for i in positions:
-		pos = seg.bp_data[i][0]
-		if seg.bp_data[i][2] == 'EA': # bulge
-			st = AngleConstraints(pos-2,pos,pos+2,180-bend_bulge,bend_tol,"bend%s.%i" %(segment,pos))
-		else: # non-bulged
-			st = AngleConstraints(pos-2,pos,pos+2,180-bend,bend_tol,"bend%s.%i" %(segment,pos))
-		cst_st += st
-
-	   pos1 = seg.bp_data[0][0]
-	   pos2 = seg.bp_data[-1][0]
-	   if len(seg.bp_data) % 2 ==0:
-		cen1 = pos1 + len(seg.bp_data)/2
-		cen2 = pos1 + len(seg.bp_data)/2 + 1
-		st = AngleConstraints(pos1,cen1,pos2,180-bend_bulge,bend_tol,"edgebend%s.%i" %(segment,cen1))
-		st = AngleConstraints(pos1,cen2,pos2,180-bend_bulge,bend_tol,"edgebend%s.%i" %(segment,cen2))
-
-	   else:
-		cen = pos1 + len(seg.bp_data)/2
-		st = AngleConstraints(pos1,cen,pos2,180-bend_bulge,bend_tol,"edgebend%s.%i" %(segment,cen))
-	   cst_st += st
-
-	   st = AngleConstraints(pos-2,pos,pos+2,180-bend_bulge,bend_tol,"bend%s.%i" %(segment,pos))
-	# twisting
-	if twist:
-	   if positions == None:
-		positions = range( len(seg.bp_data)-2)
-	   for i in positions:
-		pos1 = seg.bp_data[i][0]
-		pos2 = pos1+2
-                st = DihedralConstraints(pos1,pos2,twist,twist_tol,'dih%s.%i' %(segment,pos1))
-		cst_st += st
-	return cst_st
-
 
 def RegularStrandCurvature(**kwargs):
-	segment = kwargs.get("strand")
-
-	level = kwargs.get("level") # 1 or 2
-
-	bend = kwargs.get("global_bend",None)
-	bend_tol = kwargs.get("global_bend_tol",10.0)
+        """
+        Returns angle and dihedral constraints strings that dictate the curvature of strands
+        without bulges. Given a strand, place curvature and twist constraints every 2*level positions.
+        Angle constraints, for curvature, are placed on CA atoms. Dihedral constraints are placed between
+        CA-CB vectors. Values for twist and curvature are set by the user.
+        """
+        segment = kwargs.get("strand")
+        level = kwargs.get("level") # 1 or 2
+        bend = kwargs.get("global_bend",None)
+        bend_tol = kwargs.get("global_bend_tol",10.0)
         twist = kwargs.get("global_twist",None )
         twist_tol = kwargs.get("global_twist_tol",5.0 )
 
@@ -999,41 +893,11 @@ def RegularStrandCurvature(**kwargs):
 
 	return cst_st
 
-def BulgedStrandCurvature(**kwargs):
-	segment = kwargs.get("strand")
-	bend1 = kwargs.get("bend1",None)
-	bend1_tol = kwargs.get("bend1_tol",5.0)
-        bend2 = kwargs.get("bend2",None)
-        bend2_tol = kwargs.get("bend2_tol",5.0)
-	blue = kwargs.get("blueprint")
-	constraint_type = kwargs.get("constraint_type","harmonic" )
-
-	seg = blue.segment_dict[segment]
-	nres = len(seg.bp_data)
-	cst_st=''
-
-	pos1 = Bulged(seg)
-	pos2 = pos1+1
-	bulgepos_fromN = pos1-seg.bp_data[0][0]+1
-	bulgepos_fromC = pos1-seg.bp_data[-1][0]-1
-
-
-	# level 1
-	if bend1:
-		if nres > 6 and ( bulgepos_fromN >=3 and bulgepos_fromC <=-4 ):
-			st = CstTypeAngleConstraints(pos1-2,pos1,pos1+3,180-bend1,bend1_tol,constraint_type) ; cst_st += st
-			st = CstTypeAngleConstraints(pos2-3,pos2,pos2+2,180-bend1,bend1_tol,constraint_type) ; cst_st += st
-
-	# level 2
-	if bend2:
-		if nres >=10 and ( bulgepos_fromN >=5 and bulgepos_fromC <=-6 ):
-			st = CstTypeAngleConstraints(pos1-4,pos1,pos1+5,180-bend2,bend2_tol,constraint_type) ; cst_st += st
-			st = CstTypeAngleConstraints(pos2-5,pos2,pos2+4,180-bend2,bend2_tol,constraint_type) ; cst_st += st
-
-	return cst_st
-
-
 def AbegoPhiPsiConstraints(pos,blue):
+    """
+    Returns angle constraints for the Phi and Psi angles of position "pos",
+    limiting it to the ABEGO bin designated in the Blueprint "blue"
+    """
     abego = blue.bp_data[pos-1][2][1]
     if abego=="A":
         phi_min = -180.0
@@ -1103,6 +967,10 @@ def AbegoPhiPsiConstraints(pos,blue):
     return st
 
 def AbegoConstraintSegment(segments,blue):
+        """
+        Returns angle constraints for the Phi and Psi angles of all positions in the
+        input segment, constraining them to the designated ABEGO bin in the Bleuprint "blue".
+        """
 	blue.reindex_blueprint(start=1)
 	cst=''
 	for segment in segments:
@@ -1115,6 +983,10 @@ def AbegoConstraintSegment(segments,blue):
 	return cst
 
 def HairpinPairingResidues(blue,segment1,segment2):
+    """
+    Returns a list of paired positions in strands designated by "segment1" and
+    "segment2"
+    """
     # segment1 is the first strand in the hairpin according to sequence
     s1 = blue.segment_dict[segment1]
     s2 = blue.segment_dict[segment2]
@@ -1160,6 +1032,10 @@ def HairpinPairingResidues(blue,segment1,segment2):
     return pairs
 
 def HbondsBulgedStrand(**kwargs):
+        """
+        Returns a list of Rosetta constraint strings describing hydrogen Hbonsds between
+        two paired strands when one of them is bulged.
+        """
 	strand1 = kwargs.get('strand1')
 	strand2 = kwargs.get('strand2')
 	blue = kwargs.get('blueprint')
@@ -1216,6 +1092,11 @@ def HbondsBulgedStrand(**kwargs):
 	return cst_st
 
 def AllSheetSegmentPairs(blue):
+        """
+        Returns a dictionary where each position in a pair maps to the strand segment
+        it's paird to, and that segment pairs to the position in itself where the initial
+        position pairs to.
+        """
         cst_st=''
         pair1 = HairpinPairingResidues(blue,'E1','E2')
         pair2 = HairpinPairingResidues(blue,'E2','E3')
@@ -1240,6 +1121,10 @@ def AllSheetSegmentPairs(blue):
 
 
 def HbondsRegularHairpin(**kwargs):
+        """
+        Returns a list of Rosetta constraint strings describing hydrogen Hbonsds between
+        two paired strands when none of them is bulged.
+        """
         strand1 = kwargs.get('strand1')
         strand2 = kwargs.get('strand2')
         blue = kwargs.get('blueprint')
@@ -1271,45 +1156,6 @@ def HbondsRegularHairpin(**kwargs):
                 st = CircularHBondConstraints(pos1,pos2) ; cst_st += st
                 st = CircularHBondConstraints(pos2,pos1) ; cst_st += st
 
-
-        return cst_st
-
-
-def FlatSheetConstraints(blue):
-        cst_st=''
-        pair1 = HairpinPairingResidues(blue,'E1','E2')
-        pair2 = HairpinPairingResidues(blue,'E2','E3')
-        pair3 = HairpinPairingResidues(blue,'E3','E4')
-        # Get Triads
-        pairs=[]
-        pairs.extend(pair1)
-        pairs.extend(pair2)
-        pairs.extend(pair3)
-        triads=[]
-        for i,p1 in enumerate(pairs):
-            for j,p2 in enumerate(pairs):
-                if j>i:
-                    diff = set(p1).difference(set(p2))
-                    if len(diff) == 1:
-                        t = list( set(p1).union(set(p2)) )
-                        triads.append(t)
-
-        quarts=[]
-        for i,p1 in enumerate(triads):
-            for j,p2 in enumerate(triads):
-                if j>i:
-                    diff = set(p1).difference(set(p2))
-                    if len(diff) == 1:
-                        t = list( set(p1).union(set(p2)) )
-                        quarts.append(t)
-
-
-        # Set Constraints
-        for quart in quarts:
-            quart.sort()
-            a,b,c,d = quart
-            st = HarmonicAngleConstraints(a,b,c,170,5.0) ; cst_st += st
-            st = HarmonicAngleConstraints(a,c,d,170,5.0) ; cst_st += st
 
         return cst_st
 
