@@ -128,7 +128,7 @@
     <StrandCurvatureByLevels name="st1_curv" StrandID="1" concavity_reference_residue="last" concavity_direction="1" bend_level="2" min_bend="5" max_bend="180" twist_level="2" min_twist="0" max_twist="180" confidence="1" />
     <StrandCurvatureByLevels name="st2_curv" StrandID="2" concavity_reference_residue="first" concavity_direction="1" bend_level="2" min_bend="5" max_bend="180" twist_level="2" min_twist="0" max_twist="180" confidence="1" />
     <CompoundStatement name="secst1" >
-	    <AND filter_name="ss1" />    
+	    <AND filter_name="ss1" />
       <AND filter_name="strand_energy1"/>
       <AND filter_name="omega"/>
       <AND filter_name="rama"/>
@@ -204,7 +204,7 @@
   <RESIDUE_SELECTORS>
     <SecondaryStructure name="strands2" ss="E" include_terminal_loops="True" pose_secstruct="%%s2_SS%%"/>
     <SecondaryStructure name="loops_s2" ss="L" include_terminal_loops="False"
-                        use_dssp="False" pose_secstruct="%%s2_SS%%" />    
+                        use_dssp="False" pose_secstruct="%%s2_SS%%" />
     <PrimarySequenceNeighborhood name="flanking_s2" selector="loops_s2" lower="1" upper="1" />
     <Or name="loops_or_flanking_s2" selectors="loops_s2,flanking_s2" />
     <Not name="not_loops_or_flanking_s2" selector="loops_or_flanking_s2" />
@@ -244,7 +244,7 @@
       <CoordinateConstraintGenerator name="gen_my_csts" sd="1.0" bounded="true" bounded_width="1.0"
                                      sidechain="false" ca_only="true"/>
     </AddConstraints>
-    <!-- 
+    <!--
     AddConstraintsToCurrentConformationMover name="curr_conf_s2" use_distance_cst="1" coord_dev="0.5" bound_width="0"
                                               min_seq_sep="3" max_distance="10.0" cst_weight="1.0"
                                               CA_only="1" residue_selector="not_rebuild_s2"/
@@ -461,7 +461,7 @@
       -->
       <!--AND filter_name="H3_E4_angle"/-->
       <AND filter_name="Hkink4" />
-      <AND filter_name="hbend2" />
+      <!--AND filter_name="hbend2" /-->
       <!--AND filter_name="hbend3" /-->
       <AND filter_name="omega"/>
       <AND filter_name="rama"/>
@@ -580,7 +580,7 @@
 				  <AND filter_name="H4_HP_dist" />
 				  <AND filter_name="ss5" />
 				  <AND filter_name="Hkink5" />
-				  <AND filter_name="hbend5" />
+				  <!--AND filter_name="hbend5" /-->
 				  <!--AND filter_name="distH4Sheet" /-->
 				  <AND filter_name="avdeg_cterm" />
 				  <AND filter_name="omega"/>
@@ -630,7 +630,7 @@
     </ParsedProtocol>
     <LoopOver name="loop5" mover_name="bdr5ss" filter_name="secst5" drift="0" iterations="10" ms_whenfail="FAIL_DO_NOT_RETRY"/>
 	</MOVERS>
-																			  
+
 	<!-- ########################################################### -->
 	<!-- STEP #6: H1 and H2 ######################################## -->
 	<!-- ########################################################### -->
@@ -665,7 +665,7 @@
                          secstruct="%%s6_SS%%" use_dssp="False"/>
     <OperateOnResidueSubset name="repack_s6" selector="not_loops_or_flanking_s6" > <RestrictToRepackingRLT/> </OperateOnResidueSubset>
     <OperateOnResidueSubset name="not_des_nterm" selector="not_rebuild_s6" > <PreventRepackingRLT/> </OperateOnResidueSubset>
-  </TASKOPERATIONS>  
+  </TASKOPERATIONS>
   <!-- Step #6 FILTERS -->
   <MOVERS>
     <ConstraintSetMover name="addcst6c" add_constraints="1" cst_file="%%cst6c%%"/>
@@ -685,18 +685,18 @@
     <HelixBendFilter name="hbend2_s6" threshold="155.0" blueprint="%%bp6.b%%" HelixID="2" confidence="1" />
     <HelixKink name="hkink6" bend="20" blueprint="%%bp6.b%%"/>
     <AverageDegree name="avdeg5" threshold="15.0" distance_threshold="10.0" confidence="0"/>
-    
+
     <!--Prevent H2 from pointing downwards-->
     <StrandHelixGeometryFilter name="H2S6_angle" StrandID1="5" StrandID2="6" HelixID="2" min_dist="14" max_dist="28" min_ortho_angle="120" max_ortho_angle="180"
 		 min_plane_angle="-180" max_plane_angle="180" blueprint="%%bp6.b%%" output_type="dist" confidence="0"/>
-    
+
     <!--Prevent H1 from being too far or too close to sheet-->
     <StrandHelixGeometryFilter name="H1S4_dist" StrandID1="4" StrandID2="5" HelixID="1" min_dist="-14.5" max_dist="-12" min_ortho_angle="95" max_ortho_angle="105"
                  min_plane_angle="-10" max_plane_angle="10" blueprint="%%bp6.b%%" output_type="dist" confidence="0"/>
 
     <StrandHelixGeometryFilter name="H1S4_ortho" StrandID1="4" StrandID2="5" HelixID="1" min_dist="-14.5" max_dist="-12" min_ortho_angle="95" max_ortho_angle="105"
                  min_plane_angle="-10" max_plane_angle="10" blueprint="%%bp6.b%%" output_type="ortho_ngle" confidence="0"/>
-    
+
     <StrandHelixGeometryFilter name="H1S4_plane" StrandID1="4" StrandID2="5" HelixID="1" min_dist="-14.5" max_dist="-12" min_ortho_angle="95" max_ortho_angle="105"
                  min_plane_angle="-10" max_plane_angle="10" blueprint="%%bp6.b%%" output_type="plane_angle" confidence="0"/>
 
@@ -712,7 +712,7 @@
       <!--AND filter_name="hbend1" /-->
       <AND filter_name="hbend2_s6" />
       <!--AND filter_name="dist6a" /-->
-      <!--AND filter_name="dist6b" /--> 
+      <!--AND filter_name="dist6b" /-->
       <!--AND filter_name="dist6c" /-->
       <!--AND filter_name="dist6d" /-->
       <!--AND filter_name="dist6e" /-->
@@ -767,15 +767,15 @@
       <Add mover_name="polyval"/>
       <Add mover_name="rmcst" />
       <Add mover_name="cenmin6" />
-      <!--Add mover_name="pmm"/-->				               
+      <!--Add mover_name="pmm"/-->
       <Add mover_name="dssp" />
     </ParsedProtocol>
-    <LoopOver name="loop6" mover_name="bdr6ss" filter_name="secst6" drift="0" iterations="20" ms_whenfail="FAIL_DO_NOT_RETRY"/>	  
+    <LoopOver name="loop6" mover_name="bdr6ss" filter_name="secst6" drift="0" iterations="20" ms_whenfail="FAIL_DO_NOT_RETRY"/>
   </MOVERS>
-  
+
   <APPLY_TO_POSE>
   </APPLY_TO_POSE>
-  
+
   <PROTOCOLS>
     <Add mover_name="polyval" />
 
@@ -794,7 +794,7 @@
     <Add mover_name="set_ssene4" />
     <Add mover_name="loop4" />
     <Add mover_name="fullatom" />
-	
+
      <Add mover_name="loop5" />
      <Add mover_name="fullatom" />
      <Add mover_name="polyala"/>
@@ -803,7 +803,7 @@
 
      <Add mover_name="loop6" />
     <Add mover_name="fullatom" />
-    
+
     <Add filter_name="avdeg"/>
     <Add filter_name="cen_score_res"/>
     <Add filter_name="cent_pair_motifs"/>

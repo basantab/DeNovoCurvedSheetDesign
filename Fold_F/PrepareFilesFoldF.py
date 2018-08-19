@@ -225,7 +225,7 @@ for comb in combinations:
 			'''
 			# Vars for Stage #1
 			SS_s1 = "-parser:script_vars s1_SS=%s\n" %(''.join([ pos[2][0] for pos in Blueprint('bp1').bp_data])) ; flags_out.write(SS_s1)
-			bp1_name = "-parser:script_vars bp1=../bp1\n" ; flags_out.write(bp1_name)
+			bp1_name = "-parser:script_vars bp1=../bp1.b\n" ; flags_out.write(bp1_name)
 			bp1b_name = "-parser:script_vars bp1.b=../bp1.b\n" ; flags_out.write(bp1b_name)
 			bp1 = Blueprint('bp1'); r_res = [ i+1 for i,pos in enumerate(bp1.bp_data) if pos[-1] == 'R' ]
 			R_in_bp1= "-parser:script_vars R_in_bp1=%d-%d\n"%(r_res[0],r_res[-1]) ; flags_out.write(R_in_bp1)
