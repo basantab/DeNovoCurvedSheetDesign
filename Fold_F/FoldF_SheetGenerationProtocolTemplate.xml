@@ -218,7 +218,7 @@
       <Var name="LRH" filter="strand_hb"/>
       <Var name="STR" filter="strand_res2"/>
     </CalculatorFilter>
-    <SecondaryStructure name="ss2"  use_abego="1" blueprint="%%bp2%%" threshold="1.0" confidence="1" compute_pose_secstruct_by_dssp="1"/>
+    <SecondaryStructure name="ss2"  use_abego="1" blueprint="%%bp2.b%%" threshold="1.0" confidence="1" compute_pose_secstruct_by_dssp="1"/>
     <SheetTopology name="st2" topology="1-2.A.99;2-3.A.99" blueprint="%%bp2%%" confidence="1" />
     <CompoundStatement name="secst2" >
       <AND filter_name="ss2" />
@@ -307,7 +307,7 @@
       <Var name="LRH" filter="strand_hb"/>
       <Var name="STR" filter="strand_res3"/>
     </CalculatorFilter>
-    <SecondaryStructure name="ss3"  use_abego="1" blueprint="%%bp3%%" threshold="1.0" confidence="1" compute_pose_secstruct_by_dssp="1" />
+    <SecondaryStructure name="ss3"  use_abego="1" blueprint="%%bp3.b%%" threshold="1.0" confidence="1" compute_pose_secstruct_by_dssp="1" />
     <SheetTopology name="st3" topology="1-2.A.99;2-3.A.99;3-4.A.99" blueprint="%%bp3%%" confidence="1" />
     <CompoundStatement name="secst3" >
       <AND filter_name="omega"/>
@@ -718,12 +718,12 @@
       <!--AND filter_name="dist6e" /-->
       <AND filter_name="hkink6" />
       <!--AND filter_name="H2S6_angle" /-->
-      <AND filter_name="H1S4_dist" />
-      <AND filter_name="H1Na" />
-      <AND filter_name="H1Nb" />
-      <AND filter_name="H2N" />
-      <AND filter_name="H1C" />
-      <AND filter_name="H1Cb" />
+      <!--AND filter_name="H1S4_dist" /-->
+      <!--AND filter_name="H1Na" /-->
+      <!--AND filter_name="H1Nb" /-->
+      <!--AND filter_name="H2N" /-->
+      <!--AND filter_name="H1C" /-->
+      <!--AND filter_name="H1Cb" /-->
        <!--AND filter_name="STEP6_csts"/-->
       <AND filter_name="omega"/>
       <AND filter_name="rama"/>
@@ -797,9 +797,9 @@
 
      <Add mover_name="loop5" />
      <Add mover_name="fullatom" />
-     <Add mover_name="polyala"/>
-     	<Add mover_name="pdb5"/>
-	<Add mover_name="polyval" />
+     <!--Add mover_name="polyala"/-->
+     	<!--Add mover_name="pdb5"/-->
+	<!--Add mover_name="polyval" /-->
 
      <Add mover_name="loop6" />
     <Add mover_name="fullatom" />
