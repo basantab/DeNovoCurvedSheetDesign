@@ -34,7 +34,7 @@ args = parser.parse_args()
 template_xml = args.xml
 motif_filename = args.motif
 abego = args.abego # for L3
-topol = "L[1-1]H[19-19]L[2-2]H[7-7]L[5-5]E[4-4]L[2-2]E[4-4]L[1-1]H[13-13]L[1-1]E[12-12]L[2-2]E[12-12]L[2-2]E[14-14]L[2-2]E[8-8]L2-2]H[8-8]L[1-1]"
+topol = "L[1-1]H[17-17]L[2-2]H[7-7]L[5-5]E[4-4]L[2-2]E[4-4]L[1-1]H[13-13]L[1-1]E[12-12]L[2-2]E[12-12]L[2-2]E[14-14]L[2-2]E[8-8]L2-2]H[8-8]L[1-1]"
 
 if motif_filename:
 
@@ -510,14 +510,14 @@ for comb in combinations:
 			e3c = int(e3.bp_data[-1][0])
 			loop6 = int(blue.segment_dict['L6'].bp_data[0][0])
 
-			st = PairConstraints(h1c-2,loop6,8,2,"H1L6") ; fileoutc.write(st);
+			#st = PairConstraints(h1c-2,loop6,8,2,"H1L6") ; fileoutc.write(st);
 			st = PairConstraints(h1c-1,loop6+2,7,1.3,"H1L6") ; fileoutc.write(st);
-			st = HarmonicPairConstraints(h1c-2,loop6,8,8) ; fileout.write(st); fileoutb.write(st);
+			#st = HarmonicPairConstraints(h1c-2,loop6,8,8) ; fileout.write(st); fileoutb.write(st);
 			st = HarmonicPairConstraints(h1c-1,loop6+2,7,7) ; fileout.write(st); fileoutb.write(st);
 
 			st = PairConstraints(h1n,e3c,8,3,"H1E3n") ; fileout.write(st); fileoutb.write(st);
 			st = HarmonicPairConstraints(h1n,e3c+3,8,8) ; fileout.write(st); fileoutb.write(st);
-			st = PairConstraints(h1n,e3c+3,8,3,"H1E3") ; fileoutc.write(st);
+			#st = PairConstraints(h1n,e3c+3,8,3,"H1E3") ; fileoutc.write(st);
 			st = AngleConstraints(h1c-6,h1c+1,h2c,30,8,"E6H4") ; fileout.write(st); fileoutb.write(st);
 			st = "AtomPair N %i O %i HARMONIC 2.3 0.3\n" %(h1c+1,h1c-2) ; fileout.write(st) ; fileoutb.write(st) # H-bond for capping C-term of N-helix
 			st = "AtomPair N %i O %i HARMONIC 2.3 0.3\n" %(h1c+1,h1c-3) ; fileout.write(st) ; fileoutb.write(st)

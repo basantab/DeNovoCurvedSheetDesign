@@ -724,7 +724,7 @@
       <!--AND filter_name="H2N" /-->
       <!--AND filter_name="H1C" /-->
       <!--AND filter_name="H1Cb" /-->
-       <!--AND filter_name="STEP6_csts"/-->
+       <AND filter_name="STEP6_csts"/>
       <AND filter_name="omega"/>
       <AND filter_name="rama"/>
       <AND filter_name="avdeg"/>
