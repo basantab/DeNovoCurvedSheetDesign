@@ -33,8 +33,6 @@ args = parser.parse_args()
 template_xml = args.xml
 motif_filename = args.motif
 abego = args.abego # for L3
-#topol = "L[1-1]H[15-15]L[2-2]H[7-7]L[5-5]E[4-4]L[2-2]E[4-4]L[1-1]H[10-15]L[1-2]E[11-11]L[2-2]E[10-10]L[2-2]E[12-12]L[2-2]E[10-10]L[1-1]"
-#topol = "L[1-1]H[18-18]L[1-2]H[6-6]L[5-5]E[4-4]L[2-2]E[4-4]L[1-1]H[11,13]L[2-3]E[11-11]L[2-2]E[10-10]L[2-2]E[12-12]L[2-2]E[10-10]L[1-1]"
 topol = "L[1-1]H[16-16]L[2-2]H[7-7]L[5-5]E[4-4]L[2-2]E[4-4]L[1-1]H[14-14]L[2-2]E[10-10]L[2-2]E[10-10]L[2-2]E[12-12]L[2-2]E[9-9]L[1-1]" # Original H3 length: 14
 
 if motif_filename:
@@ -42,7 +40,6 @@ if motif_filename:
 	ss,combinations, dic_abego = MotifTopology(topol,motif_filename)
 else:
 	ss,combinations = GetCombinations(topol)
-#print combinations
 
 print topol
 #==============================

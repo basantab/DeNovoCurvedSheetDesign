@@ -30,7 +30,7 @@ parser.add_argument('-resfile', type=str)
 args = parser.parse_args()
 
 template_xml = args.xml
-topol = "L[1-1]H[18-18]L[2-2]H[11-11]L[2-2]H[17-17]L[2-2]E[12-12]L[2-2]E[12-12]L[2-2]E[14-14]L[2-2]E[9-9]L[1-1]"
+topol = "L[1-1]H[18-18]L[3-3]H[10-10]L[2-2]H[17-17]L[2-2]E[12-12]L[2-2]E[12-12]L[2-2]E[14-14]L[2-2]E[9-9]L[1-1]"
 
 ss,combinations = GetCombinations(topol)
 
@@ -122,7 +122,7 @@ for comb in combinations:
 			# step6
 			AddSegmentToBlueprint(refblue = 'bp', segments = ['H1','L2'], blue0 = 'bp4', \
 					      newblue='bp6', append=False,  ss_pairing_shift="SSPAIR 1-2.A.99;3-4.A.99", \
-					      hh_pairing="HHPAIR 1-2.A",hs_pairing='HSSTRIPLET 2,1-2',only_remodel=['H2','L3'], seg_abego={'L2':'GB'}) # seg_abego={'L2':'GB'}
+					      hh_pairing="HHPAIR 1-2.A",hs_pairing='HSSTRIPLET 2,1-2',only_remodel=['H2','L3'], seg_abego={'L2':'AAB'}) # seg_abego={'L2':'GB'}
 
 			#---------------------------------------------------------
 			# Blueprints are already written. Now XMLs, cst, etc...
@@ -310,14 +310,14 @@ for comb in combinations:
 			XMLReplaceXXXYYY(xml_lines=xml_lines,identifier='dist4b',xxx=bulge2-1, yyy=h2c)
 			st = CircularHBondConstraints(h2c+2,bulge2-1) ; fileout.write(st); fileoutb.write(st)
 			XMLReplaceXXXYYY(xml_lines=xml_lines,identifier='dist4c',xxx=h2c+2, yyy=bulge2-1)
-			st = CircularHBondConstraints(h3n,h2c+3) ; fileout.write(st); fileoutb.write(st)
+			#st = CircularHBondConstraints(h3n,h2c+3) ; fileout.write(st); fileoutb.write(st)
 			XMLReplaceXXXYYY(xml_lines=xml_lines,identifier='dist4d',xxx=h3n, yyy=h2c+3) #deactivated in xml
-			st = CircularHBondConstraints(h2c+5,h2c+2) ; fileout.write(st); fileoutb.write(st)
+			#st = CircularHBondConstraints(h2c+5,h2c+2) ; fileout.write(st); fileoutb.write(st)
 			XMLReplaceXXXYYY(xml_lines=xml_lines,identifier='dist4e',xxx=h2c+5, yyy=h2c+2)
 			# loop L5 constraints
-			st = CircularHBondConstraints(h3n+3,h3n-1) ; fileout.write(st); fileoutb.write(st)
+			#st = CircularHBondConstraints(h3n+3,h3n-1) ; fileout.write(st); fileoutb.write(st)
 			XMLReplaceXXXYYY(xml_lines=xml_lines,identifier='dist4f',xxx=h3n+3, yyy=h3n-1) #deactivated in xml
-			st = CircularHBondConstraints(h3n-1,h2c+5) ; fileout.write(st); fileoutb.write(st)
+			#st = CircularHBondConstraints(h3n-1,h2c+5) ; fileout.write(st); fileoutb.write(st)
 			XMLReplaceXXXYYY(xml_lines=xml_lines,identifier='dist4g',xxx=h3n-1, yyy=h2c+5) #deactivated in xml
 			## CSTs for H3-E3 loop:
 			E4 = blue.segment_dict['E4']
@@ -326,10 +326,10 @@ for comb in combinations:
                         l6c = int(L6.bp_data[-1][0])
 			h3c = int(seg2.bp_data[-1][0])
 			l6n = int(L6.bp_data[0][0])
-			st = "AtomPair N %i O %i HARMONIC 2.5 0.3\n" %(l6n,h3c-2) ; fileout.write(st) ; fileoutb.write(st)
-			st = "AtomPair N %i O %i HARMONIC 3.0 0.5\n" %(l6n,h3c-3); fileout.write(st) ; fileoutb.write(st)
-			st = "AtomPair N %i O %i HARMONIC 3.0 0.5\n" %(l6n+1,e4c-1); fileout.write(st) ; fileoutb.write(st)
-			st = "AtomPair N %i O %i HARMONIC 3.0 0.5\n" %(l6n+2,e4c-1); fileout.write(st) ; fileoutb.write(st)
+			#st = "AtomPair N %i O %i HARMONIC 2.5 0.3\n" %(l6n,h3c-2) ; fileout.write(st) ; fileoutb.write(st)
+			#st = "AtomPair N %i O %i HARMONIC 3.0 0.5\n" %(l6n,h3c-3); fileout.write(st) ; fileoutb.write(st)
+			#st = "AtomPair N %i O %i HARMONIC 3.0 0.5\n" %(l6n+1,e4c-1); fileout.write(st) ; fileoutb.write(st)
+			#st = "AtomPair N %i O %i HARMONIC 3.0 0.5\n" %(l6n+2,e4c-1); fileout.write(st) ; fileoutb.write(st)
 			#st = "AtomPair N %i O %i HARMONIC 3.0 0.5\n" %(e4c,l6n); fileout.write(st) ; fileoutb.write(st) #Additional Hbond between H3 C term and L8 N term
 			## H3-H4 distance from hairpin:
                         e2 = blue.segment_dict['E2']
@@ -338,21 +338,21 @@ for comb in combinations:
                         l5n = int(l5.bp_data[0][0])
 
 			# E1-E2 Hairpin constraints
-			st = HbondsRegularHairpin(strand1="E1",strand2="E2",blueprint=blue) ; fileout.write(st); fileoutb.write(st);
+			#st = HbondsRegularHairpin(strand1="E1",strand2="E2",blueprint=blue) ; fileout.write(st); fileoutb.write(st);
 
 			# Perfect Helices
 			st = PerfectHelixCst('bp4',1); fileoutb.write(st); fileout.write(st);
 			st = PerfectHelixCst('bp4',2); fileoutb.write(st); fileout.write(st);
 
 			# Angle between E4 C, L6_2 and H3C to avoid weird loop
-			st = AngleConstraints(e4c-1,l6n+1,h3c,95,3,"E6H4") ; fileout.write(st); fileoutb.write(st);
-			st = AngleConstraints(e4c-1,l6n+1,h3c,95,15,"E6H4b") ; fileoutc.write(st); fileoutb.write(st);
+			#st = AngleConstraints(e4c-1,l6n+1,h3c,95,3,"E6H4") ; fileout.write(st); fileoutb.write(st);
+			#st = AngleConstraints(e4c-1,l6n+1,h3c,95,15,"E6H4b") ; fileoutc.write(st); fileoutb.write(st);
 
 			#Enforce ABEGO at positions 10 and 9:
 			l2 = blue.segment_dict['L2']
 			l2N = int(l2.bp_data[0][0])
-			st = AbegoPhiPsiConstraints(l2N,blue) ; fileoutb.write(st);
-			st = AbegoPhiPsiConstraints(l2N+1,blue) ; fileoutb.write(st);
+			#st = AbegoPhiPsiConstraints(l2N,blue) ; fileoutb.write(st);
+			#st = AbegoPhiPsiConstraints(l2N+1,blue) ; fileoutb.write(st);
 
 			fileout.close()
 			fileoutb.close()
@@ -441,15 +441,15 @@ for comb in combinations:
 			fileoutb = open('cst6b','w')
 			fileoutc = open('cst6c','w')
                         # HB contraints of bulge2 and H2
-                        st = CircularHBondConstraints(e1_hb,bulge2) ; fileout.write(st) ; fileoutb.write(st)
+                        #st = CircularHBondConstraints(e1_hb,bulge2) ; fileout.write(st) ; fileoutb.write(st)
                         XMLReplaceXXXYYY(xml_lines=xml_lines,identifier='dist6a',xxx=e1_hb, yyy=bulge2)
                         st = CircularHBondConstraints(bulge2-1,h2c) ; fileout.write(st) ; fileoutb.write(st)
                         XMLReplaceXXXYYY(xml_lines=xml_lines,identifier='dist6b',xxx=bulge2-1, yyy=h2c)
                         st = CircularHBondConstraints(h2c+2,bulge2-1) ; fileout.write(st) ; fileoutb.write(st)
                         XMLReplaceXXXYYY(xml_lines=xml_lines,identifier='dist6c',xxx=h2c+2, yyy=bulge2-1)
-                        st = CircularHBondConstraints(h3n,h2c+3) ; fileout.write(st) ; fileoutb.write(st)
+                        #st = CircularHBondConstraints(h3n,h2c+3) ; fileout.write(st) ; fileoutb.write(st)
                         XMLReplaceXXXYYY(xml_lines=xml_lines,identifier='dist6d',xxx=h3n, yyy=h2c+3)
-                        st = CircularHBondConstraints(h2c+5,h2c+2) ; fileout.write(st) ; fileoutb.write(st)
+                        #st = CircularHBondConstraints(h2c+5,h2c+2) ; fileout.write(st) ; fileoutb.write(st)
 			XMLReplaceXXXYYY(xml_lines=xml_lines,identifier='dist6e',xxx=h2c+5, yyy=h2c+2)
 
 			## Perfect helices:
@@ -461,21 +461,22 @@ for comb in combinations:
 			h2c = int(seg1.bp_data[-1][0])
 			h1n = int(seg0.bp_data[0][0])
 			h1c = int(seg0.bp_data[-1][0])
-                        e1 = blue.segment_dict['E1']
-                        e1_hb = e1.bp_data[0][0]
+			e1 = blue.segment_dict['E1']
+			e1_hb = e1.bp_data[0][0]
+			e1c = int(e1.bp_data[-1][0])
 			e3 = blue.segment_dict['E3']
 			e3c = int(e3.bp_data[-1][0])
-			loop6 = int(blue.segment_dict['L6'].bp_data[0][0])
+			loop4 = int(blue.segment_dict['L4'].bp_data[0][0]) - 3
 
-			st = PairConstraints(h1c-2,loop6,8,2,"H1L6a") ; fileout.write(st); fileoutb.write(st);
-			st = PairConstraints(h1c-2,loop6,8,2,"H1L6b") ; fileout.write(st); fileoutb.write(st);
-			st = PairConstraints(h1c-2,loop6,8,2,"H1L6c") ; fileout.write(st); fileoutb.write(st);
-			st = PairConstraints(h1n,e3c,8,3,"H1E3n") ; fileout.write(st); #fileoutb.write(st);
-			st = PairConstraints(h1n,e3c+3,8,3,"H1E3") ; fileout.write(st); fileoutb.write(st);
-			st = AngleConstraints(h1c-6,h1c+1,h2c,30,8,"E6H4") ; fileout.write(st); fileoutb.write(st);
+			st = HarmonicPairConstraints(h1c-1,loop4,8,8) ; fileout.write(st); fileoutb.write(st);
+			#st = PairConstraints(h1c-2,loop6,8,2,"H1L6b") ; fileout.write(st); fileoutb.write(st);
+			#st = PairConstraints(h1c-2,loop6,8,2,"H1L6c") ; fileout.write(st); fileoutb.write(st);
+			st = HarmonicPairConstraints(h1n,e1c,8,8) ; fileout.write(st); #fileoutb.write(st);
+			st = HarmonicPairConstraints(h1n,e1c+3,8,8) ; fileout.write(st); fileoutb.write(st);
+			#st = HarmonicAngleConstraints(h1c-6,h1c+1,h2c,30,30) ; fileout.write(st); fileoutb.write(st);
 
-			st = "AtomPair N %i O %i HARMONIC 2.3 0.3\n" %(h1c+1,h1c-2) ; fileout.write(st); fileoutb.write(st);
-			st = "AtomPair N %i O %i HARMONIC 2.5 0.3\n" %(h1c+1,h1c-3) ; fileout.write(st); fileoutb.write(st);
+			#st = "AtomPair N %i O %i HARMONIC 2.3 0.3\n" %(h1c+1,h1c-2) ; fileout.write(st); fileoutb.write(st);
+			#st = "AtomPair N %i O %i HARMONIC 2.5 0.3\n" %(h1c+1,h1c-3) ; fileout.write(st); fileoutb.write(st);
 
 			#Enforce ABEGO at positions 27 and 28:
 			l3 = blue.segment_dict['L3']
@@ -497,16 +498,16 @@ for comb in combinations:
                         cst6_name = "-parser:script_vars cst6=../cst6\n" ; flags_out.write(cst6_name)
 			cst6b_name = "-parser:script_vars cst6b=../cst6b\n" ; flags_out.write(cst6b_name)
 			H1Na_r1 = "-parser:script_vars H1Na_r1=%s\n"%(str(h1n)) ; flags_out.write(H1Na_r1)
-			H1Na_r2 = "-parser:script_vars H1Na_r2=%s\n"%(str(e3c+3)) ; flags_out.write(H1Na_r2)
+			H1Na_r2 = "-parser:script_vars H1Na_r2=%s\n"%(str(e1c+3)) ; flags_out.write(H1Na_r2)
 			H1Na_dist = "-parser:script_vars H1Na_dist=%s\n"%("13.5") ; flags_out.write(H1Na_dist)
 			H1Nb_r1= "-parser:script_vars H1Nb_r1=%s\n"%(str(h1n)) ; flags_out.write(H1Nb_r1)
-			H1Nb_r2= "-parser:script_vars H1Nb_r2=%s\n"%(str(e3c)) ; flags_out.write(H1Nb_r2)
+			H1Nb_r2= "-parser:script_vars H1Nb_r2=%s\n"%(str(e1c)) ; flags_out.write(H1Nb_r2)
 			H1Nb_dist = "-parser:script_vars H1Nb_dist=%s\n"%("12.5") ; flags_out.write(H1Nb_dist)
 			H2N_r1 = "-parser:script_vars H2N_r1=%s\n"%(str(h2n)) ; flags_out.write(H2N_r1)
 			H2N_r2 = "-parser:script_vars H2N_r2=%s\n"%(str(h3n+8)) ; flags_out.write(H2N_r2)
 			H2N_dist = "-parser:script_vars H2N_dist=%s\n"%("8") ; flags_out.write(H2N_dist)
-			H1C_r1 = "-parser:script_vars H1C_r1=%s\n"%(str(h1c)) ; flags_out.write(H1C_r1)
-			H1C_r2 = "-parser:script_vars H1C_r2=%s\n"%(str(loop6)) ;flags_out.write(H1C_r2)
+			H1C_r1 = "-parser:script_vars H1C_r1=%s\n"%(str(h1c-1)) ; flags_out.write(H1C_r1)
+			H1C_r2 = "-parser:script_vars H1C_r2=%s\n"%(str(loop4)) ;flags_out.write(H1C_r2)
 			H1C_dist = "-parser:script_vars H1C_dist=%s\n"%("11.0") ;flags_out.write(H1C_dist)
 			flags_out.write("-picking_old_max_score 1\n")
 			flags_out.write("-rama_map ../../../Rama_XPG_3level.txt\n")

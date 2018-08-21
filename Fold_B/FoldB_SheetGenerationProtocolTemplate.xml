@@ -446,9 +446,9 @@
       <AND filter_name="dist4e" />
       <AND filter_name="dist4f" />
       <AND filter_name="dist4g" />
+      <AND filter_name="H3S1_2_angle" />
+      <AND filter_name="H3_E4_angle" />
       -->
-      <AND filter_name="H3S1_2_angle"/>
-      <AND filter_name="H3_E4_angle"/>
       <AND filter_name="Hkink4" />
       <AND filter_name="hbend2" />
       <AND filter_name="hbend3" />
@@ -579,8 +579,8 @@
       <!--AND filter_name="dist6d" /-->
       <!--AND filter_name="dist6e" /-->
       <AND filter_name="hkink6" />
-      <AND filter_name="H2S4_5_angle" />
-      <AND filter_name="H1S4_angle" />
+      <!--AND filter_name="H2S4_5_angle" /-->
+      <!--AND filter_name="H1S4_angle" /-->
       <AND filter_name="H1Na" />
       <AND filter_name="H1Nb" />
       <!--
