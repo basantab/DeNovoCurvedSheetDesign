@@ -30,7 +30,7 @@ parser.add_argument('-resfile', type=str)
 args = parser.parse_args()
 
 template_xml = args.xml
-topol = "L[1-1]H[18-18]L[3-3]H[10-10]L[2-2]H[17-17]L[2-2]E[12-12]L[2-2]E[12-12]L[2-2]E[14-14]L[2-2]E[9-9]L[1-1]"
+topol = "L[1-1]H[18-18]L[2-2]H[11-11]L[2-2]H[17-17]L[2-2]E[12-12]L[2-2]E[12-12]L[2-2]E[14-14]L[2-2]E[9-9]L[1-1]"
 
 ss,combinations = GetCombinations(topol)
 
@@ -122,7 +122,7 @@ for comb in combinations:
 			# step6
 			AddSegmentToBlueprint(refblue = 'bp', segments = ['H1','L2'], blue0 = 'bp4', \
 					      newblue='bp6', append=False,  ss_pairing_shift="SSPAIR 1-2.A.99;3-4.A.99", \
-					      hh_pairing="HHPAIR 1-2.A",hs_pairing='HSSTRIPLET 2,1-2',only_remodel=['H2','L3'], seg_abego={'L2':'AAB'}) # seg_abego={'L2':'GB'}
+					      hh_pairing="HHPAIR 1-2.A",hs_pairing='HSSTRIPLET 2,1-2',only_remodel=['H2','L3'], seg_abego={'L2':'GB'}) # seg_abego={'L2':'GB'}
 
 			#---------------------------------------------------------
 			# Blueprints are already written. Now XMLs, cst, etc...
@@ -459,7 +459,7 @@ for comb in combinations:
 			## H1 csts:
 			h2n = int(seg1.bp_data[0][0])
 			h2c = int(seg1.bp_data[-1][0])
-			h1n = int(seg0.bp_data[0][0])
+			h1n = int(seg0.bp_data[0][0])+2
 			h1c = int(seg0.bp_data[-1][0])
 			e1 = blue.segment_dict['E1']
 			e1_hb = e1.bp_data[0][0]
@@ -468,11 +468,12 @@ for comb in combinations:
 			e3c = int(e3.bp_data[-1][0])
 			loop4 = int(blue.segment_dict['L4'].bp_data[0][0]) - 3
 
-			st = HarmonicPairConstraints(h1c-1,loop4,8,8) ; fileout.write(st); fileoutb.write(st);
+			st = HarmonicPairConstraints(h1c-1,loop4,7,8) ; fileout.write(st); fileoutb.write(st);
+			st = HarmonicPairConstraints(h1c-1,loop4-3,9,10) ; fileout.write(st); fileoutb.write(st);
 			#st = PairConstraints(h1c-2,loop6,8,2,"H1L6b") ; fileout.write(st); fileoutb.write(st);
 			#st = PairConstraints(h1c-2,loop6,8,2,"H1L6c") ; fileout.write(st); fileoutb.write(st);
-			st = HarmonicPairConstraints(h1n,e1c,8,8) ; fileout.write(st); #fileoutb.write(st);
-			st = HarmonicPairConstraints(h1n,e1c+3,8,8) ; fileout.write(st); fileoutb.write(st);
+			st = HarmonicPairConstraints(h1n,e1c,9,8) ; fileout.write(st); #fileoutb.write(st);
+			st = HarmonicPairConstraints(h1n,e1c+3,9,8) ; fileout.write(st); fileoutb.write(st);
 			#st = HarmonicAngleConstraints(h1c-6,h1c+1,h2c,30,30) ; fileout.write(st); fileoutb.write(st);
 
 			#st = "AtomPair N %i O %i HARMONIC 2.3 0.3\n" %(h1c+1,h1c-2) ; fileout.write(st); fileoutb.write(st);
@@ -508,7 +509,7 @@ for comb in combinations:
 			H2N_dist = "-parser:script_vars H2N_dist=%s\n"%("8") ; flags_out.write(H2N_dist)
 			H1C_r1 = "-parser:script_vars H1C_r1=%s\n"%(str(h1c-1)) ; flags_out.write(H1C_r1)
 			H1C_r2 = "-parser:script_vars H1C_r2=%s\n"%(str(loop4)) ;flags_out.write(H1C_r2)
-			H1C_dist = "-parser:script_vars H1C_dist=%s\n"%("11.0") ;flags_out.write(H1C_dist)
+			H1C_dist = "-parser:script_vars H1C_dist=%s\n"%("8.0") ;flags_out.write(H1C_dist)
 			flags_out.write("-picking_old_max_score 1\n")
 			flags_out.write("-rama_map ../../../Rama_XPG_3level.txt\n")
 			flags_out.close()

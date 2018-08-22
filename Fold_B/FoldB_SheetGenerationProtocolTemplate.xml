@@ -581,12 +581,14 @@
       <AND filter_name="hkink6" />
       <!--AND filter_name="H2S4_5_angle" /-->
       <!--AND filter_name="H1S4_angle" /-->
+
       <AND filter_name="H1Na" />
       <AND filter_name="H1Nb" />
       <!--
       <AND filter_name="H2N" />
-      -->
+    -->
       <AND filter_name="H1C" />
+
       <AND filter_name="omega"/>
       <AND filter_name="rama"/>
       <AND filter_name="avdeg"/>
@@ -644,31 +646,18 @@
     <Add mover_name="set_ssene1" />
     <Add mover_name="loop1" />
     <Add mover_name="fullatom" />
-    <Add mover_name="polyala"/>
-    <Add mover_name="pdb1"/>
-    <Add mover_name="polyval" />
     <!-- Step #2 -->
     <Add mover_name="set_ssene2" />
     <Add mover_name="loop2" />
     <Add mover_name="fullatom" />
-    <Add mover_name="polyala"/>
-    <Add mover_name="pdb2"/>
-    <Add mover_name="polyval" />
     <!-- Step #3 -->
     <Add mover_name="set_ssene3" />
     <Add mover_name="loop3" />
     <Add mover_name="fullatom" />
-    <Add mover_name="polyala"/>
-    <Add mover_name="pdb3"/>
-    <Add mover_name="polyval" />
     <!-- Step #4 -->
     <Add mover_name="set_ssene4" />
     <Add mover_name="loop4" />
     <Add mover_name="fullatom" />
-    <Add mover_name="polyala"/>
-    <Add mover_name="pdb4"/>
-    <Add mover_name="polyval" />
-    <!-- Step #5 -->
 
     <!-- Step #6 -->
     <Add mover_name="loop6" />
@@ -677,7 +666,7 @@
     <Add filter_name="avdeg"/>
     <Add filter_name="omega"/>
     <Add filter_name="rama"/>
-    <Add filter_name="H1S4_angle" />
+    <!--Add filter_name="H1S4_angle" /-->
     <Add filter_name="av_strand_hb"/>
     <Add filter_name="cen_score_res"/>
     <Add filter_name="cent_pair_motifs"/>
