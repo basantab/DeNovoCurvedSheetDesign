@@ -468,12 +468,12 @@ for comb in combinations:
 			e3c = int(e3.bp_data[-1][0])
 			loop4 = int(blue.segment_dict['L4'].bp_data[0][0]) - 3
 
-			st = HarmonicPairConstraints(h1c-1,loop4,7,8) ; fileout.write(st); fileoutb.write(st);
-			st = HarmonicPairConstraints(h1c-1,loop4-3,9,10) ; fileout.write(st); fileoutb.write(st);
+			st = HarmonicPairConstraints(h1c-1,loop4,7,7) ; fileout.write(st); fileoutb.write(st);
+			st = HarmonicPairConstraints(h1c-1,loop4-3,8,8) ; fileout.write(st); fileoutb.write(st);
 			#st = PairConstraints(h1c-2,loop6,8,2,"H1L6b") ; fileout.write(st); fileoutb.write(st);
 			#st = PairConstraints(h1c-2,loop6,8,2,"H1L6c") ; fileout.write(st); fileoutb.write(st);
-			st = HarmonicPairConstraints(h1n,e1c,9,8) ; fileout.write(st); #fileoutb.write(st);
-			st = HarmonicPairConstraints(h1n,e1c+3,9,8) ; fileout.write(st); fileoutb.write(st);
+			st = HarmonicPairConstraints(h1n,e1c,8,8) ; fileout.write(st); #fileoutb.write(st);
+			st = HarmonicPairConstraints(h1n,e1c+3,8,8) ; fileout.write(st); fileoutb.write(st);
 			#st = HarmonicAngleConstraints(h1c-6,h1c+1,h2c,30,30) ; fileout.write(st); fileoutb.write(st);
 
 			#st = "AtomPair N %i O %i HARMONIC 2.3 0.3\n" %(h1c+1,h1c-2) ; fileout.write(st); fileoutb.write(st);
