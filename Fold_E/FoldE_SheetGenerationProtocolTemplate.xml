@@ -510,7 +510,7 @@
       <Reweight scoretype="hbond_lr_bb" weight="1.0" />
       <Reweight scoretype="rama" weight="1.15" />
       <Reweight scoretype="omega" weight="1.5" />
-      <Reweight scoretype="cen_pair_motifs" weight="20.0"/>
+      <!--Reweight scoretype="cen_pair_motifs" weight="20.0"/-->
       <!--Reweight scoretype="cen_pair_motif_degree" weight="2.0"/-->
       <Reweight scoretype="atom_pair_constraint" weight="1.00" />
       <Reweight scoretype="angle_constraint" weight="1.00" />
