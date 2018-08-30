@@ -18,8 +18,6 @@
       <Reweight scoretype="hbond_lr_bb" weight="1.0" />
       <Reweight scoretype="rama" weight="1.0" />
       <Reweight scoretype="omega" weight="1.0" />
-      <Reweight scoretype="cen_pair_motifs" weight="20.0"/>
-      <Reweight scoretype="cen_pair_motif_degree" weight="20.0"/>
       <Reweight scoretype="atom_pair_constraint" weight="1.0" />
       <Reweight scoretype="angle_constraint" weight="1.0" />
       <Reweight scoretype="dihedral_constraint" weight="1.0" />
@@ -53,9 +51,7 @@
     <TaskAwareScoreType name="rama" scorefxn="talaris" score_type="rama" threshold="0.2" task_operations="all_ss_design" mode="individual" confidence="1"/>
     <TaskAwareScoreType name="omega" scorefxn="talaris" score_type="omega" threshold="0.6" task_operations="all_ss_design" mode="individual" confidence="1"/>
     <ScoreType name="cen_score_type" scorefxn="remodel_cen" score_type="total_score" threshold="1000" confidence="0"/>
-    <ScoreType name="cen_pair_motif_type" scorefxn="scoring" score_type="cen_pair_motifs" threshold="1000" confidence="0"/>
     <MoveBeforeFilter name="cent_score" mover="cent" filter="cen_score_type"/>
-    <MoveBeforeFilter name="cent_pair_motifs" mover="cent" filter="cen_pair_motif_type"/>
     <CalculatorFilter name="av_strand_hb" equation="SCO/RES" threshold="-0.65" confidence="1">
       <VAR name="RES" filter="strand_res"/>
       <VAR name="SCO" filter="strand_hb"/>
@@ -661,7 +657,6 @@
     <Add filter_name="avdeg"/>
 
     <Add filter_name="cen_score_res"/>
-    <Add filter_name="cent_pair_motifs"/>
     <Add mover_name="polyala"/>
   </PROTOCOLS>
   <OUTPUT/>
