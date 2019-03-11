@@ -3,7 +3,7 @@ This repository contains the files necessary to generate most designs in the 201
 
 <strong>Overview:</strong>
 
-The code used to generate curved sheets following the principles is fully implemented in rosetta_scripts XMLs, with assisting python code to generate key input files: blueprints describing sheet register shifts and ABEGO bins, and constraint files dictating strand-strand hydrogen-bond pairing, curvature and twist. We have made working code for the folds described in the paper publically available at this Git repository. The BPB_functions and Blueprint libraries contain a number of small functions used in the construction of all folds, while the code specific to each fold, used to prepare all the rosetta_script files, is located in each of the Fold_* folders, named PrepareFilesFold*.py. Each fold folder also comes with its own XML protocol, with the small variations necessary for each case.
+The code used to generate curved sheets following the principles is fully implemented in rosetta_scripts XMLs, with assisting python code to generate key input files: blueprints describing sheet register shifts and ABEGO bins, and constraint files dictating strand-strand hydrogen-bond pairing, curvature and twist. We have made working code for the folds described in the paper publicly available at this Git repository. The BPB_functions and Blueprint libraries contain a number of small functions used in the construction of all folds, while the code specific to each fold, used to prepare all the rosetta_script files, is located in each of the Fold_* folders, named PrepareFilesFold*.py. Each fold folder also comes with its own XML protocol, with the small variations necessary for each case.
 
 <strong>Obtaining the Rosetta rosetta_scripts app:</strong>
 
