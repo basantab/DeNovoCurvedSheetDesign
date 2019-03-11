@@ -37,6 +37,6 @@ Rama_XPG_3level.txt: A "general" map from phi/psi coordinate to energy -  more p
 
 <strong>References:</strong>
 
-(1) Marcos*, E., Basanta*, B., Chidyausiku, T. M., Tang, Y., Oberdorfer, G., Liu, G., ... & Pereira, J. H. (2017). Principles for designing proteins with cavities formed by curved β sheets. Science, 355(6321), 201-206.
+(1) Marcos*, Enrique, Basanta*, Benjamin, Tamuka M. Chidyausiku, Yuefeng Tang, Gustav Oberdorfer, Gaohua Liu, G.V.T. Swapna, Rongjin Guan, Daniel-Adriano Silva, Jiayi Dou, Jose Henrique Pereira, Rong Xiao, Banumathi Sankaran, Peter H. Zwart, Gaetano T. Montelione, David Baker "Principles for designing proteins with cavities formed by curved beta-sheets." Science 355.6321 (2017): 201-206.
 
 *: Indicates co-first authorship
